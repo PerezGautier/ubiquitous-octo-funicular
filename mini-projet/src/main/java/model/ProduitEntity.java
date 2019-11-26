@@ -17,11 +17,12 @@ public class ProduitEntity {
     private String quantiteUnite;
     private float prix ;
     private int qttStock;
+    private int unitesCmdees;
     private int reapro;
     private int dispo;
 
     public ProduitEntity(int produitId, String nom, int fournisseur, int categorie, String quantiteUnite,
-                         float prix, int qttStock, int reapro, int dispo) {
+                         float prix, int qttStock, int unitesCmdees, int reapro, int dispo) {
         this.produitId = produitId;
         this.nom = nom;
         this.fournisseur = fournisseur;
@@ -29,6 +30,7 @@ public class ProduitEntity {
         this.quantiteUnite = quantiteUnite;
         this.prix = prix;
         this.qttStock = qttStock;
+        this.unitesCmdees = unitesCmdees;
         this.reapro = reapro;
         this.dispo = dispo;
     }
@@ -60,6 +62,10 @@ public class ProduitEntity {
     }
 
     public void setQttStock(int qttStock) {
+        this.qttStock = qttStock;
+    }
+    
+    public void unitesCmdees(int qttStock) {
         this.qttStock = qttStock;
     }
 
@@ -99,6 +105,10 @@ public class ProduitEntity {
 
     public int getQttStock() {
         return qttStock;
+    }
+    
+    public int unitesCmdees() {
+        return unitesCmdees;
     }
 
     public int getReapro() {

@@ -41,6 +41,38 @@ public class DAO {
 	return result;
     }
     
+    /**
+    * @return Liste de toutes les produits d'une catégorie donnée
+    * @throws SQLException renvoyées par JDBC
+    */
+    public List<ProduitEntity> produitsDuneCategorie(int codeCategorie) throws SQLException {
+
+	List<ProduitEntity> result = new LinkedList<>();
+
+	String sql = "SELECT * FROM Produit WHERE Categorie = ?";
+	try (Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+		stmt.setInt(1, codeCategorie);
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {
+                    int produitId = rs.getInt("Reference");
+                    String nom = rs.getString("Nom");
+                    String qtt = rs.getString("Quantite_par_unite");
+                    float prix = rs.getFloat("Prix_unitaire");
+                    int dispo = rs.getInt("Indisponible");
+                    int fournisseur = rs.getInt("Fournisseur");
+                    int qttStock = rs.getInt("Unites_en_stock");
+                    int reapro = rs.getInt("Prix_unitaire");
+                    int categorie = rs.getInt("Categorie");
+                    int unitesCmdees = rs.getInt("Unites_commandees");
+                    
+                    ProduitEntity ligne = new ProduitEntity(produitId, nom, fournisseur, categorie, qtt, prix, qttStock, reapro, unitesCmdees, dispo);
+                    result.add(ligne);
+		}
+	}
+	return result;
+}
+    
     
 
 }
