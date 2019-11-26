@@ -6,7 +6,7 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<title>catégories</title>
+			<title>Produits</title>
 			<!-- Formatage d'une table par des CSS, inspiré de : https://stackoverflow.com/questions/5967564/form-inside-a-table -->
 			<style>
 				.table
@@ -39,17 +39,20 @@
 		</style>		
 	</head>
 	<body>
-		
-		<%-- On on montre la liste des catégories --%>
-		<div class="table">
-			<div class="thead"><div class="td">categories</div></div>
-			<div class="tbody">
-			<c:forEach var="record" items="${categories}">
-				<form class="tr" method="get">
-					<div class="td"><input type="text" name="code" value="${record}" readonly/></div>
-				</form>	  		    
-			</c:forEach>  
-			</div>
-		</div>
+            
+            <!-- Titre de la page -->
+            <h1>Produits proposés : </h1>
+                
+            <%-- On on montre la liste des catégories --%>
+            <div class="table">
+		<div class="thead"><div class="td">categories</div></div>
+                <div class="tbody">
+                    <c:forEach var="record" items="${categories}">
+                        <form class="tr" method="get">
+                            <div class="td"><input type="text" name="code" value="${record}" readonly/></div>
+                        </form>	  		    
+                    </c:forEach>  
+                </div>
+            </div>
 	</body>        
 </html>
