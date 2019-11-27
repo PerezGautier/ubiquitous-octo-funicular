@@ -48,7 +48,7 @@ public class indexServlet extends HttpServlet {
 
 		}
 		// On continue vers la page JSP sélectionnée
-		request.getRequestDispatcher("allcategorie.jsp").forward(request, response);
+		request.getRequestDispatcher("indexProduits.jsp").forward(request, response);
 	}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

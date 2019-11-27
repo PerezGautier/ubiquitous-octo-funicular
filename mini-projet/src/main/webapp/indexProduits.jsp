@@ -64,17 +64,42 @@
                     <c:forEach var="record" items="${produits}">
                         <form method="get">
                             <div class="tr">
-                                <div class="td"><input type="text" name="nom" value="${record.Reference}" readonly/></div>
-                            </div>
-                            <div class="tr">
-                                <div class="td"><input type="text" name="nom" value="${record.Nom}" readonly/></div>
-                            </div>
-                            <div class="tr">
-                                <div class="td"><input type="text" name="nom" value="${record.Prix_unitaire}" readonly/></div>
+                                <div class="td"><input type="text" name="nom" value="${record.produitId}" readonly/></div>
+                                <div class="td"><input type="text" name="nom" value="${record.nom}" readonly/></div>
+                                <div class="td"><input type="text" name="nom" value="${record.prix}" readonly/></div>
                             </div>
                         </form>	  		    
                     </c:forEach>  
                 </div>
             </div>
+            
+            
+            
+            
+            <%-- Partie d'identification du client --%>
+            <br/><br/><br/>
+            <form method="get">
+                <table>
+                    <tr>
+                        <td>
+                            Identifiant :
+                        </td>
+                        <td>
+                            <input type="text" id="id" name="id"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Mot de Passe :          
+                        </td>
+                        <td>
+                            <input type="password" id="mdp" name="mdp"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            
+            
 	</body>        
 </html>
