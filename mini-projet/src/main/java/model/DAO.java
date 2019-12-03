@@ -193,9 +193,34 @@ public class DAO {
     }
     
     /**
-    * @return Liste de toutes les produits d'une catégorie donnée
-    * @throws SQLException renvoyées par JDBC
-    */
+     * @param codeClient
+     * @param attributsModifies
+     * @param valeursModifiees
+     * @throws SQLException renvoyées par JDBC
+     */
+    public void modifClient(String codeClient, String[] attributsModifies, String[] valeursModifiees) throws SQLException {
+	String sqlBase = "UPDATE CLIENT SET ";
+        String sqlFin = " WHERE Code = ?";
+        // Construction de la requete
+        for (int i = 0; i <= attributsModifies.length; i++) {
+            sqlBase += attributsModifies[i] + "=" + valeursModifiees[i];
+            if(i!=attributsModifies.length) {
+                sqlBase += ", ";
+            }
+        }    
+        String sql = sqlBase + sqlFin;
+	try (Connection myConnection = myDataSource.getConnection();
+            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+            
+            stmt.setString(1, codeClient);
+
+            int result = stmt.executeUpdate();
+            
+            myConnection.commit();
+	}
+        
+    }
+    
     public ClientEntity unClient(String codeClient) throws SQLException {
         ClientEntity result = new ClientEntity("","","","","","","","","","","");
 	String sql = "SELECT * FROM Client WHERE Code = ?";
