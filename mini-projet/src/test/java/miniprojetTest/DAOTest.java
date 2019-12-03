@@ -13,6 +13,12 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import static java.sql.Types.NULL;
 import javax.sql.DataSource;
+import model.ClientEntity;
+import static model.DataSourceFactory.getDataSource;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -22,22 +28,7 @@ public class DAOTest {
     
     public DAOTest() {
     }
-    
-    @BeforeClass
-    public static void setUpClass() {
-    }
-    
-    @AfterClass
-    public static void tearDownClass() {
-    }
-    
-    @Before
-    public void setUp() {
-    }
-    
-    @After
-    public void tearDown() {
-    }
+
 
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
@@ -47,7 +38,7 @@ public class DAOTest {
     private static Connection myConnection ;
 
     private DAO myDAO; // L'objet à tester
-    private CustomerEntity myCustomer;
+    private ClientEntity myCustomer;
 
     /**
      *
@@ -58,26 +49,10 @@ public class DAOTest {
     public  void setUp() throws IOException, SQLException {
             // On crée la connection vers la base de test "in memory"
             myDataSource = getDataSource();
-            myConnection = myDataSource.getConnection();
-            // On crée le schema de la base de test
-            executeSQLScript(myConnection, "schema.sql");
-            // On y ajoute les triggers
-            executeSQLScript(myConnection, "triggers.sql");
-            // On y met des données
-            executeSQLScript(myConnection, "testdata.sql");		
+            myConnection = myDataSource.getConnection();	
 
             myDAO = new DAO(myDataSource);
-            myCustomer = new CustomerEntity( 'ALFKI', 'Alfreds Futterkiste', 'Maria Anders', 'Représentant(e)', 'Obere Str. 57', 'Berlin', NULL, '12209', 'Allemagne', '030-0074321', '030-0076545');
-    }
-
-    private void executeSQLScript(Connection connexion, String filename)  throws IOException, SQLException {
-            // On initialise la base avec le contenu d'un fichier de test
-            String sqlFilePath = this.getClass().getResource(filename).getFile();
-            SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
-
-            sqlFile.setConnection(connexion);
-            sqlFile.execute();
-            sqlFile.closeReader();		
+            myCustomer = new ClientEntity( "ALFKI", "Alfreds Futterkiste", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", null, "12209", "Allemagne", "030-0074321", "030-0076545");
     }
 
     @After
@@ -89,8 +64,8 @@ public class DAOTest {
     @Test
     public void canModifClient() throws Exception {
             // On calcule combien le client a de factures
-            int id = myCustomer.getCustomerId();
-            int before = myDAO.modifClient('ALFKI',['Fonction'], ['Rep'] );
+            String id = myCustomer.getCode();
+            int before = myDAO.modifClient("ALFKI",["Fonction"], ["Rep"] );
             // Un tableau d'un attribut à modifier
             String[] atts = new String['Fonction'];
             // Un tableau d'une valeur
