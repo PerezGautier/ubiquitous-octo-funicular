@@ -36,8 +36,8 @@ public class showAllProduct extends HttpServlet {
 
 		Properties resultat = new Properties();
 		try {
-			request.setAttribute("categoriesList", dao.toutesCategories());
-                        request.setAttribute("records", dao.tousProduits());
+			resultat.put("categoriesList", dao.toutesCategories());
+                        resultat.put("records", dao.tousProduits());
                         
 		} catch (SQLException ex) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

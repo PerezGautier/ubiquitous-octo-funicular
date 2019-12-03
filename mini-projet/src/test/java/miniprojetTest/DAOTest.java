@@ -5,7 +5,6 @@
  */
 package miniprojetTest;
 
-import static com.sun.xml.internal.ws.dump.LoggingDumpTube.Position.Before;
 import model.DAO;
 import java.io.File;
 import java.io.IOException;
@@ -60,7 +59,7 @@ public class DAOTest {
             myConnection.close();
             myDAO = null; // Pas vraiment utile
     }
-
+/*
     @Test
     public void canModifClient() throws Exception {
             // On calcule combien le client a de factures
