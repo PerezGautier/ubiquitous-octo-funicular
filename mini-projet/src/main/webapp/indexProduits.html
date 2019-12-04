@@ -30,6 +30,10 @@
                                 var processedTemplate = Mustache.to_html(template, result);
                                 // On affiche la liste des options dans le select
                                 $('#codes').html(processedTemplate);
+                                
+                                var template2 = $('#categoriesTemplate').html();
+                                var processedTemplate2 = Mustache.to_html(template2, result);
+                                $('#categories').html(processedTemplate2);
                             }
                 });
             }
@@ -48,6 +52,23 @@
         <h1>Produits en vente : </h1>
         
         
+        <!-- Le template qui sert à afficher la liste des categories -->
+        <script id="categoriesTemplate" type="text/template">
+            <form>
+                <select>
+                    {{#categoriesList}}
+                        <option>{{.}}</option>
+                    {{/categoriesList}}
+                </select>
+            </form>
+        </script>
+        
+        
+        
+        <!-- La zone où la combobox de liste des categories va s'afficher -->
+        <div id="categories"></div>
+        
+        
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
         
@@ -59,9 +80,9 @@
             {{#records}}
                 {{! Une ligne dans la table }}
                 <TR>
-                    <TD>{{records.produitId}}</TD>\n\
-                    <TD>{{records.nom}}</TD>\n\
-                    <TD>{{records.prix}}</TD>
+                    <TD>{{produitId}} </TD>
+                    <TD>{{nom}} </TD>
+                    <TD>{{prix}} </TD>
                 </TR>
             {{/records}}
             </TABLE>
