@@ -229,7 +229,7 @@ public class DAO {
 		stmt.setString(1, codeClient);
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
-                    String produitId = rs.getString("Code");
+                    String clientId = rs.getString("Code");
                     String societe = rs.getString("Societe");
                     String contact = rs.getString("Contact");
                     String fonction = rs.getString("Fonction");
@@ -241,7 +241,7 @@ public class DAO {
                     String tel = rs.getString("Telephone");
                     String fax = rs.getString("Fax");
                     
-                    ClientEntity client = new ClientEntity(produitId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+                    ClientEntity client = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
                     result = client;
 		}
 	}
