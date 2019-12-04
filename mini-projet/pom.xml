@@ -39,6 +39,7 @@
                 <artifactId>derbytools</artifactId>
                 <version>10.14.1.0</version>
         </dependency>	
+        
         <!-- for generating JSON -->
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -62,6 +63,13 @@
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>2.4.0</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- sqltool utilisé seulement pour le test pour initialiser la base -->                
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>sqltool</artifactId>
+            <version>2.0.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
