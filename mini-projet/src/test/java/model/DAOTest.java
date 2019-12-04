@@ -3,21 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package miniprojetTest;
+package model;
 
 import model.DAO;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import static java.sql.Types.NULL;
 import javax.sql.DataSource;
 import model.ClientEntity;
-import static model.DataSourceFactory.getDataSource;
 import org.junit.After;
-import org.junit.AfterClass;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Test;
+import org.hsqldb.cmdline.SqlFile;
+import org.hsqldb.cmdline.SqlToolError;
+import static org.junit.Assert.assertFalse;
 
 /**
  *
@@ -45,35 +46,51 @@ public class DAOTest {
      * @throws SQLException
      */
     @Before
-    public  void setUp() throws IOException, SQLException {
-            // On crée la connection vers la base de test "in memory"
-            myDataSource = getDataSource();
-            myConnection = myDataSource.getConnection();	
+    public  void setUp() throws IOException, SQLException, SqlToolError {
+        // On crée la connection vers la base de test "in memory"
+        myDataSource = getDataSource();
+        myConnection = myDataSource.getConnection();	
+        // On crée le schema de la base de test
+        executeSQLScript(myConnection, "schema.sql");
+        // On y met des données
+        executeSQLScript(myConnection, "donnees.sql");		
 
-            myDAO = new DAO(myDataSource);
-            myCustomer = new ClientEntity( "ALFKI", "Alfreds Futterkiste", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", null, "12209", "Allemagne", "030-0074321", "030-0076545");
+        myDAO = new DAO(myDataSource);
+        myCustomer = new ClientEntity( "ALFKI", "Alfreds Futterkiste", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", null, "12209", "Allemagne", "030-0074321", "030-0076545");
     }
 
+    private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
+        // On initialise la base avec le contenu d'un fichier de test
+        String sqlFilePath = DAOTest.class.getResource(filename).getFile();
+        SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
+
+        sqlFile.setConnection(connexion);
+        sqlFile.execute();
+        sqlFile.closeReader();		
+    }
+    
     @After
     public void tearDown() throws SQLException {
             myConnection.close();
             myDAO = null; // Pas vraiment utile
     }
-/*
+
     @Test
     public void canModifClient() throws Exception {
-            // On calcule combien le client a de factures
             String id = myCustomer.getCode();
-            int before = myDAO.modifClient("ALFKI",["Fonction"], ["Rep"] );
+            ClientEntity before = myDAO.unClient(id);
+            System.out.println("Before : " + before.getFonction());
             // Un tableau d'un attribut à modifier
-            String[] atts = new String['Fonction'];
+            String[] atts = {"Fonction"};
             // Un tableau d'une valeur
-            String[] valeurs = new String['Rep'];
-            // On exécute la transaction
-            myDAO.modifClient(myCustomer, atts, valeurs);
-            int after = myDAO.modifClient( myCustomer.getCustomerId() );
-            // Le client a maintenant une facture de plus
-            assertEquals(before + 1, after);		
+            String[] valeurs = {"Rep"};
+            System.out.println("avt");
+            myDAO.modifClient(id, atts, valeurs);
+            System.out.println("apres");
+            ClientEntity after = myDAO.unClient(id);
+            System.out.println("After : " + after.getFonction());
+            assertFalse((before.getFonction()).equals(after.getFonction()));
+            
     }
 /*
     // On vérifie que la création d'une facture met à jour le chiffre d'affaire du client (Trigger)
@@ -98,7 +115,7 @@ public class DAOTest {
 
             assertEquals(before + 2f * 10f, after, 0.001f);		
     }
-
+*/
 
 
     public static DataSource getDataSource() throws SQLException {
@@ -108,5 +125,5 @@ public class DAOTest {
             ds.setPassword("sa");
             return ds;
     }
-*/
+
 }

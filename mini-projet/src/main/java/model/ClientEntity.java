@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.Objects;
+
 /**
  *
  * @author pedago
@@ -125,6 +127,71 @@ public class ClientEntity {
 
     public void setFax(String Fax) {
         this.Fax = Fax;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.Code);
+        hash = 37 * hash + Objects.hashCode(this.Societe);
+        hash = 37 * hash + Objects.hashCode(this.Contact);
+        hash = 37 * hash + Objects.hashCode(this.Fonction);
+        hash = 37 * hash + Objects.hashCode(this.Adresse);
+        hash = 37 * hash + Objects.hashCode(this.Ville);
+        hash = 37 * hash + Objects.hashCode(this.Region);
+        hash = 37 * hash + Objects.hashCode(this.Code_postal);
+        hash = 37 * hash + Objects.hashCode(this.Pays);
+        hash = 37 * hash + Objects.hashCode(this.Telephone);
+        hash = 37 * hash + Objects.hashCode(this.Fax);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ClientEntity other = (ClientEntity) obj;
+        if (!Objects.equals(this.Code, other.Code)) {
+            return false;
+        }
+        if (!Objects.equals(this.Societe, other.Societe)) {
+            return false;
+        }
+        if (!Objects.equals(this.Contact, other.Contact)) {
+            return false;
+        }
+        if (!Objects.equals(this.Fonction, other.Fonction)) {
+            return false;
+        }
+        if (!Objects.equals(this.Adresse, other.Adresse)) {
+            return false;
+        }
+        if (!Objects.equals(this.Ville, other.Ville)) {
+            return false;
+        }
+        if (!Objects.equals(this.Region, other.Region)) {
+            return false;
+        }
+        if (!Objects.equals(this.Code_postal, other.Code_postal)) {
+            return false;
+        }
+        if (!Objects.equals(this.Pays, other.Pays)) {
+            return false;
+        }
+        if (!Objects.equals(this.Telephone, other.Telephone)) {
+            return false;
+        }
+        if (!Objects.equals(this.Fax, other.Fax)) {
+            return false;
+        }
+        return true;
     }
     
     
