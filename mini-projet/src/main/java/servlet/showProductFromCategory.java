@@ -5,10 +5,13 @@
  */
 package servlet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -36,19 +39,34 @@ public class showProductFromCategory extends HttpServlet {
 		throws ServletException, IOException {
 		String param = request.getParameter("cat");
                 int cat = Integer.parseInt( param );
+                
+                
+		Properties resultat = new Properties();
+                
+                
 		try {
 			DAO dao = new DAO(DataSourceFactory.getDataSource());
-			request.setAttribute("param", dao.produitsDuneCategorie(cat));
+			resultat.put("records", dao.produitsDuneCategorie(cat));
+			resultat.put("categoriesList", dao.toutesCategories());
 			
 			
-		} catch (Exception ex) {
-			Logger.getLogger("discountEditor").log(Level.SEVERE, "Action en erreur", ex);
-			request.setAttribute("message", ex.getMessage());
-		} finally {
-
+		}  catch (SQLException ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			resultat.put("records", Collections.EMPTY_LIST);
+			resultat.put("message", ex.getMessage());
 		}
-		// On continue vers la page JSP sélectionnée
-		request.getRequestDispatcher("ProduitsFromCategory.jsp").forward(request, response);
+		
+                
+                
+		try (PrintWriter out = response.getWriter()) {
+			// On spécifie que la servlet va générer du JSON
+			response.setContentType("application/json;charset=UTF-8");
+			// Générer du JSON
+			// Gson gson = new Gson();
+			// setPrettyPrinting pour que le JSON généré soit plus lisible
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			out.println(gson.toJson(resultat));
+		}
 	}
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -38,6 +38,32 @@
                 });
             }
             
+            
+            // change de categories de produits affichés
+            function changeCat( categorie ) {
+                $.ajax({
+                    url: "showProductFromCategory",
+                    data: {"cat": categorie},
+                    dataType: "json",
+                    success: 
+                            function (result) {
+                                // Le code source du template est dans la page
+                                var template = $('#codesTemplate').html();
+                                // On combine le template avec le résultat de la requête
+                                var processedTemplate = Mustache.to_html(template, result);
+                                // On affiche la liste des options dans le select
+                                $('#codes').html(processedTemplate);
+                                
+                                var template2 = $('#categoriesTemplate').html();
+                                var processedTemplate2 = Mustache.to_html(template2, result);
+                                $('#categories').html(processedTemplate2);
+                            },
+                    error: showError
+                });
+                return false;
+            }
+            
+            
             // Fonction qui traite les erreurs de la requête
             function showError(xhr, status, message) {
                 alert(JSON.parse(xhr.responseText).message);
@@ -54,12 +80,13 @@
         
         <!-- Le template qui sert à afficher la liste des categories -->
         <script id="categoriesTemplate" type="text/template">
-            <form>
+            <form onsubmit="changeCat(1);">
                 <select>
                     {{#categoriesList}}
-                        <option>{{.}}</option>
+                        <option value={{.}}>{{.}}</option>
                     {{/categoriesList}}
                 </select>
+                <input type="submit" value="Chercher">
             </form>
         </script>
         
