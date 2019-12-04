@@ -1,8 +1,12 @@
-       
 <!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
     <head>
-        <title>Affichage des produits</title>
+        <title>Affichage des catégories</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- On charge jQuery -->
         <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -12,14 +16,14 @@
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
                         // On montre la liste des codes
-                        showCode();
+                        showCat();
                     }
             );
 
-            function showCode() {
+            function showCat() {
                 // On fait un appel AJAX pour chercher les codes
                 $.ajax({
-                    url: "indexServlet",
+                    url: "showAllCategorie",
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats
@@ -30,10 +34,6 @@
                                 var processedTemplate = Mustache.to_html(template, result);
                                 // On affiche la liste des options dans le select
                                 $('#codes').html(processedTemplate);
-                                
-                                var template2 = $('#categoriesTemplate').html();
-                                var processedTemplate2 = Mustache.to_html(template2, result);
-                                $('#categories').html(processedTemplate2);
                             }
                 });
             }
@@ -49,24 +49,7 @@
     </head>
     <body>
         <!-- On montre le formulaire de saisie -->
-        <h1>Produits en vente : </h1>
-        
-        
-        <!-- Le template qui sert à afficher la liste des categories -->
-        <script id="categoriesTemplate" type="text/template">
-            <form>
-                <select>
-                    {{#categoriesList}}
-                        <option>{{.}}</option>
-                    {{/categoriesList}}
-                </select>
-            </form>
-        </script>
-        
-        
-        
-        <!-- La zone où la combobox de liste des categories va s'afficher -->
-        <div id="categories"></div>
+        <h1>Catégories : </h1>
         
         
          <!-- La zone où les résultats vont s'afficher -->
@@ -75,19 +58,14 @@
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
             <TABLE>
-            <tr><th>Code</th><th>Nom</th><th>Prix</th></tr>
+            <tr><th>Catégories</th></tr>
             {{! Pour chaque enregistrement }}
-            {{#records}}
+            {{#categoriesList}}
                 {{! Une ligne dans la table }}
                 <TR>
-                    <TD>{{produitId}} </TD>
-                    <TD>{{nom}} </TD>
-                    <TD>{{prix}} </TD>
-                    <TD>{{produitId}}</TD>
-                    <TD>{{nom}}</TD>
-                    <TD>{{prix}}</TD>
+                    <TD>{{.}}</TD>
                 </TR>
-            {{/records}}
+            {{/categoriesList}}
             </TABLE>
         </script>
     </body>
