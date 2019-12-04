@@ -1,21 +1,22 @@
 package servlet;
 
 import java.io.IOException;
-import java.sql.SQLIntegrityConstraintViolationException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+
+// bibliothèque Google GSon
+import com.google.gson.*;
+import java.sql.SQLException;
+import java.util.Properties;
+
 import model.DAO;
 import model.DataSourceFactory;
 
-/**
- * Le contrôleur de l'application
- * @author rbastide
- */
 @WebServlet(name = "showAllCategorie", urlPatterns = {"/showAllCategorie"})
 public class showAllCategorie extends HttpServlet {
 
@@ -29,20 +30,29 @@ public class showAllCategorie extends HttpServlet {
 	 */
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
-		
-		try {
-			DAO dao = new DAO(DataSourceFactory.getDataSource());
-			request.setAttribute("categories", dao.toutesCategories());			
-			
-			
-		} catch (Exception ex) {
-			Logger.getLogger("discountEditor").log(Level.SEVERE, "Action en erreur", ex);
-			request.setAttribute("message", ex.getMessage());
-		} finally {
 
+		// Créér le DAO avec sa source de données
+		DAO dao = new DAO(DataSourceFactory.getDataSource());
+
+		Properties resultat = new Properties();
+		try {
+			resultat.put("categoriesList", dao.toutesCategories());
+                        
+		} catch (SQLException ex) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			resultat.put("categoriesList", Collections.EMPTY_LIST);
+			resultat.put("message", ex.getMessage());
 		}
-		// On continue vers la page JSP sélectionnée
-		request.getRequestDispatcher("allcategorie.jsp").forward(request, response);
+
+		try (PrintWriter out = response.getWriter()) {
+			// On spécifie que la servlet va générer du JSON
+			response.setContentType("application/json;charset=UTF-8");
+			// Générer du JSON
+			// Gson gson = new Gson();
+			// setPrettyPrinting pour que le JSON généré soit plus lisible
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			out.println(gson.toJson(resultat));
+		}
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
