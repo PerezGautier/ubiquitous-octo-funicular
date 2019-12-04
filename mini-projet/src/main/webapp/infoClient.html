@@ -16,7 +16,7 @@ and open the template in the editor.
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
                         // On montre la liste des codes
-                        showInfo();
+                        //showInfo();
                     }
             );
 
@@ -24,6 +24,8 @@ and open the template in the editor.
                 // On fait un appel AJAX pour chercher les codes
                 $.ajax({
                     url: "showAllInfoClient",
+                    // serialize() renvoie tous les paramètres saisis dans le formulaire
+                    data: $("#codeForm").serialize(),
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats
@@ -50,6 +52,12 @@ and open the template in the editor.
     <body>
         <!-- On montre le formulaire de saisie -->
         <h1>Info Client : </h1>
+        <form id="codeForm" onsubmit="showInfo();">
+            <fieldset><legend>numero client</legend>
+            Code : <input id="code" name="code"><br/>
+            <input type="submit" value="chercher">
+            </fieldset>
+        </form>
         
         
          <!-- La zone où les résultats vont s'afficher -->

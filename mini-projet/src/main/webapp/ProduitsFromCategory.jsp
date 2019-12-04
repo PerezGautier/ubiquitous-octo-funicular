@@ -16,7 +16,7 @@
             <div class="table">
 		<div class="thead"><div class="td">categories</div></div>
                 <div class="tbody">
-                    <c:forEach var="record" items="${categories}">
+                    <c:forEach var="record" items="${param}">
                         <form class="tr" method="get">
                             <div class="td"><input type="text" name="code" value="${record}" readonly/></div>
                         </form>	  		    
