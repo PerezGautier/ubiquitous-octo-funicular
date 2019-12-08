@@ -47,7 +47,7 @@ public class DAO {
     
 
     public int ajoutCategorie(int codeCategorie, String LibelleCategorie, String descriptionCategorie) throws SQLException{
-        int result;
+        int result = 0;
         
         String sql = "INSERT INTO Categorie VALUES ( ?, ?, ?) ";
         
@@ -62,7 +62,7 @@ public class DAO {
     }
     
     public int supprimerCategorie(int codeCategorie) throws SQLException{
-        int result;
+        int result = 0;
         
         String sql = "delete from categorie where Code=?";
         
@@ -75,7 +75,7 @@ public class DAO {
     }
     
     public int modifierCategorie(int codeCategorie, String LibelleCategorie, String descriptionCategorie) throws SQLException{
-        int result;
+        int result = 0;
         
         String sql = "update categorie set Code = ?, Libelle=?, description=? where code = ?";
         
@@ -108,6 +108,88 @@ public class DAO {
 		}
 	}
 	return result;
+    }
+    
+    
+    public ProduitEntity unProduit(int Reference) throws SQLException{
+        ProduitEntity result = null;
+        
+        String sql = "select * from Produit where Reference=?";
+        
+        try(Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, Reference);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int reference = rs.getInt("Reference");
+                String nom = rs.getString("Nom");
+                int fournisseur = rs.getInt("Fournisseur");
+                int categorie = rs.getInt("Categorie");
+                String quantite_par_unite = rs.getString("Quantite_par_unite");
+                float prix_unitaire = rs.getFloat("Prix_unitaire");
+                int unites_en_stock = rs.getInt("Unites_en_stock");
+                int unites_commandees = rs.getInt("Unites_commandees");
+                int niveau_de_reappro = rs.getInt("Niveau_de_reappro");
+                int indisponible = rs.getInt("Indisponible");
+                result = new ProduitEntity(reference,nom,fournisseur,categorie,quantite_par_unite,prix_unitaire,unites_en_stock,unites_commandees,niveau_de_reappro,indisponible);
+            } 
+        }
+        return result;
+    }
+    
+    
+    public int ajoutProduit(int reference,String nom, int fournisseur, int categorie, String quantite_par_unite, float prix_unitaire, int unites_en_stock, int unites_commandees, int niveau_de_reappro, int indisponible) throws SQLException{
+        int result = 0;
+        String sql = "INSERT INTO Produit VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try(Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, reference);
+            stmt.setString(2, nom);
+            stmt.setInt(3, fournisseur);
+            stmt.setInt(4, categorie);
+            stmt.setString(5, quantite_par_unite);
+            stmt.setFloat(6, prix_unitaire);
+            stmt.setInt(7, unites_en_stock);
+            stmt.setInt(8, unites_commandees);
+            stmt.setInt(9, niveau_de_reappro);
+            stmt.setInt(10, indisponible);
+            
+            result = stmt.executeUpdate();
+        }
+        return result;
+    }
+    
+    public int supprimerProduit(int reference) throws SQLException{
+        int result = 0;
+        String sql = "delete from produit where reference=?";
+        try(Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, reference);
+            result = stmt.executeUpdate();
+        }
+        return result;
+    }
+    
+    public int modifierProduit(int reference,String nom, int fournisseur, int categorie, String quantite_par_unite, float prix_unitaire, int unites_en_stock, int unites_commandees, int niveau_de_reappro, int indisponible) throws SQLException{
+        int result = 0;
+        String sql = "update produit set reference=?, nom=?,fournisseur=?, categorie=?, quantite_par_unite=?, prix_unitaire=?, unites_en_stock=?, unites_commandees=?, niveau_de_reappro=?, indisponible=? where reference=?";
+        try(Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, reference);
+            stmt.setString(2, nom);
+            stmt.setInt(3, fournisseur);
+            stmt.setInt(4, categorie);
+            stmt.setString(5, quantite_par_unite);
+            stmt.setFloat(6, prix_unitaire);
+            stmt.setInt(7, unites_en_stock);
+            stmt.setInt(8, unites_commandees);
+            stmt.setInt(9, niveau_de_reappro);
+            stmt.setInt(10, indisponible);
+            stmt.setInt(11, reference);
+            
+            result = stmt.executeUpdate();
+        }
+        return result;
     }
     
     /**
