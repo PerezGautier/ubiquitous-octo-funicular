@@ -74,7 +74,7 @@ public class DAOTest {
             myConnection.close();
             myDAO = null; // Pas vraiment utile
     }
-
+/*
     @Test
     public void canModifClient() throws Exception {
             String id = myCustomer.getCode();
@@ -92,6 +92,7 @@ public class DAOTest {
             assertFalse((before.getFonction()).equals(after.getFonction()));
             
     }
+    */
 /*
     // On vérifie que la création d'une facture met à jour le chiffre d'affaire du client (Trigger)
     @Test
