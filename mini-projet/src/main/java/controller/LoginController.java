@@ -42,7 +42,7 @@ public class LoginController extends HttpServlet {
 
 		} else { // L'utilisateur est connecté
 			// On choisit la page d'affichage
-			jspView = "affiche.jsp";
+			jspView = "protected/affiche.jsp";
 		}
 		// On va vers la page choisie
 		request.getRequestDispatcher(jspView).forward(request, response);
