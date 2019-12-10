@@ -196,14 +196,14 @@ public class DAO {
     * @return Liste de toutes les produits d'une catégorie donnée
     * @throws SQLException renvoyées par JDBC
     */
-    public List<ProduitEntity> produitsDuneCategorie(int codeCategorie) throws SQLException {
+    public List<ProduitEntity> produitsDuneCategorie(String libCategorie) throws SQLException {
 
 	List<ProduitEntity> result = new LinkedList<>();
 
-	String sql = "SELECT * FROM Produit WHERE Categorie = ?";
+	String sql = "SELECT * FROM Produit JOIN Categorie ON Categorie=Code WHERE Libelle = ?";
 	try (Connection connection = myDataSource.getConnection(); 
 		 PreparedStatement stmt = connection.prepareStatement(sql)) {
-		stmt.setInt(1, codeCategorie);
+		stmt.setString(1, libCategorie);
 		ResultSet rs = stmt.executeQuery();
 		while (rs.next()) {
                     int produitId = rs.getInt("Reference");
@@ -308,7 +308,7 @@ public class DAO {
                 //récuperer l'id du produit
                 int resultIdProd = 0;
                 try (Connection myConnectionIdProd = myDataSource.getConnection();
-                    PreparedStatement stmtIdProd = myConnectionIdProd.prepareStatement(sql)) {
+                    PreparedStatement stmtIdProd = myConnectionIdProd.prepareStatement(sqlIdProd)) {
                     
                     myConnectionIdProd.setAutoCommit(false);
                     stmtIdProd.setInt(1, cleID);
@@ -317,7 +317,7 @@ public class DAO {
                     
                     /**MODIF DU NB D UNITES COMMANDEES DS PROSUIT*/
                     try (Connection myConnectionMAJ = myDataSource.getConnection();
-                        PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sql)) {
+                        PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sqlUnites)) {
                         // mise à jour dunb d'unités commandées
                         myConnectionMAJ.setAutoCommit(false);
                         stmtMAJ.setInt(1, resultIdProd);
@@ -340,58 +340,87 @@ public class DAO {
     }
     
     /**
-     * @param codeClient
-     * @param attributsModifies
-     * @param valeursModifiees
+     * @param Code
+     * @param Societe
+     * @param Contact
+     * @param Fonction
+     * @param Adresse
+     * @param Ville
+     * @param Region
+     * @param Code_postal
+     * @param Pays
+     * @param Telephone
+     * @param Fax
+     * @return 
      * @throws SQLException renvoyées par JDBC
      */
-    public void modifClient(String codeClient, String[] attributsModifies, String[] valeursModifiees) throws SQLException {
-	String sqlBase = "UPDATE CLIENT SET ";
-        String sqlFin = " WHERE Code = ?";
-        // Construction de la requete
-        for (int i = 0; i <= attributsModifies.length; i++) {
-            sqlBase += attributsModifies[i] + "=" + valeursModifiees[i];
-            if(i!=attributsModifies.length) {
-                sqlBase += ", ";
-            }
-        }    
-        String sql = sqlBase + sqlFin;
-	try (Connection myConnection = myDataSource.getConnection();
-            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
-            
-            stmt.setString(1, codeClient);
+    public int modifClient(String Code, String Societe, String Contact, String Fonction, String Adresse, String Ville,
+            String Region, String Code_postal, String Pays, String Telephone, String Fax) throws SQLException {
+		String sql = "UPDATE CLIENT SET Societe=?, Contact=?, Fonction=?, Adresse=?, Ville=?, Region=?, Code_postal=?, Pays=?, Telephone=?, Fax=?,  WHERE Code = ?";
+		int result =0;
+		try (Connection myConnection = myDataSource.getConnection();
+                    PreparedStatement stmt = myConnection.prepareStatement(sql)) {
 
-            int result = stmt.executeUpdate();
-            
-            myConnection.commit();
-	}
-        
+                    stmt.setString(1, Societe);
+                    stmt.setString(2, Contact);
+                    stmt.setString(3, Fonction);
+                    stmt.setString(4, Adresse);
+                    stmt.setString(5, Ville);
+                    stmt.setString(6, Region);
+                    stmt.setString(7, Code_postal);
+                    stmt.setString(8, Pays);
+                    stmt.setString(9, Telephone);
+                    stmt.setString(10, Fax);
+                    stmt.setString(11, Code);
+
+                    result = stmt.executeUpdate();
+
+                    myConnection.commit();
+		}
+        return result;
     }
     
     public ClientEntity unClient(String codeClient) throws SQLException {
         ClientEntity result = new ClientEntity("","","","","","","","","","","");
-	String sql = "SELECT * FROM Client WHERE Code = ?";
-	try (Connection connection = myDataSource.getConnection(); 
-		 PreparedStatement stmt = connection.prepareStatement(sql)) {
-		stmt.setString(1, codeClient);
-		ResultSet rs = stmt.executeQuery();
-		while (rs.next()) {
-                    String clientId = rs.getString("Code");
-                    String societe = rs.getString("Societe");
-                    String contact = rs.getString("Contact");
-                    String fonction = rs.getString("Fonction");
-                    String add = rs.getString("Adresse");
-                    String ville = rs.getString("Ville");
-                    String region = rs.getString("Region");
-                    String cp = rs.getString("Code_postal");
-                    String pays = rs.getString("Pays");
-                    String tel = rs.getString("Telephone");
-                    String fax = rs.getString("Fax");
-                    
-                    ClientEntity client = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
-                    result = client;
+		String sql = "SELECT * FROM Client WHERE Code = ?";
+		try (Connection connection = myDataSource.getConnection(); 
+			 PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, codeClient);
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+                            String clientId = rs.getString("Code");
+                            String societe = rs.getString("Societe");
+                            String contact = rs.getString("Contact");
+                            String fonction = rs.getString("Fonction");
+                            String add = rs.getString("Adresse");
+                            String ville = rs.getString("Ville");
+                            String region = rs.getString("Region");
+                            String cp = rs.getString("Code_postal");
+                            String pays = rs.getString("Pays");
+                            String tel = rs.getString("Telephone");
+                            String fax = rs.getString("Fax");
+
+                            ClientEntity client = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+                            result = client;
+			}
 		}
-	}
-	return result;
+		return result;
     }
+	
+	public float caCategoriePeriode(String libCategorie, Date deb, Date fin) throws SQLException {
+		float chiffreAffaires = 0;
+		String sql = "SELECT SUM Prix_unitaire AS CA FROM Produit" +
+                            "JOIN Ligne ON Reference=Produit JOIN Commande ON Commande=numero WHERE Libelle = ?" +
+                            "WHERE Categorie = ? AND Saisie_le > ? AND Saisie_le < ?";
+		try (Connection connection = myDataSource.getConnection(); 
+			 PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, libCategorie);
+			stmt.setDate(2, deb);
+			stmt.setDate(3, fin);
+			ResultSet rs = stmt.executeQuery();
+			chiffreAffaires = rs.getFloat("CA");
+		}
+		return chiffreAffaires;
+		
+	}
 }
