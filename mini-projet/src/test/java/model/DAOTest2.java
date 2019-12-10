@@ -191,6 +191,33 @@ public class DAOTest2 {
         assertEquals(prod80.getReapro(),10);
         assertEquals(prod80.getDispo(),0);
     }
+    
+    @Test
+    public void testProduitCmdExist() throws SQLException{
+        int[] idProd = dao.donneIdsProd(10248);
+        assertNotNull("Le produit de la commande existe", idProd);
+        assertEquals(idsProd,10248);
+    }
+    
+    @Test
+    public void testProduitCmdNotExist() throws SQLException{
+        CommandeEntity cmd = dao.uneCommande(11100);
+        assertNull("Le produit de la commande n'existe pas encore",cmd);
+    }
+    
+    @Test
+    public void testCommandeExist() throws SQLException{
+        CommandeEntity cmd = dao.uneCommande(10248);
+        assertNotNull("La commande existe", cmd);
+        assertEquals(cmd.getClient(),"VINET");
+    }
+    
+    @Test
+    public void testCommandeNotExist() throws SQLException{
+        CommandeEntity cmd = dao.uneCommande(11100);
+        assertNull("La commande n'existe pas encore",cmd);
+    }
+    
     /**
     @Test
     public void testAjoutCommande() throws SQLException{
@@ -199,7 +226,7 @@ public class DAOTest2 {
         int result = dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
         assertEquals(result,1);
         ProduitEntity prod80 = dao.unProduit(80);
-        assertNotNull("Le produit existe", prod80);
+        assertNotNull("La commande existe", prod80);
     }*/
     
     @Test

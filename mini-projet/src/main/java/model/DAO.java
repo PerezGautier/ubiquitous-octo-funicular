@@ -234,26 +234,62 @@ public class DAO {
 
 	String sql = "SELECT * FROM Produit";
 	try (Connection connection = myDataSource.getConnection(); 
-		Statement stmt = connection.createStatement()) {
-		ResultSet rs = stmt.executeQuery(sql);
-		while (rs.next()) {
-                    int produitId = rs.getInt("Reference");
-                    String nom = rs.getString("Nom");
-                    String qtt = rs.getString("Quantite_par_unite");
-                    float prix = rs.getFloat("Prix_unitaire");
-                    int dispo = rs.getInt("Indisponible");
-                    int fournisseur = rs.getInt("Fournisseur");
-                    int qttStock = rs.getInt("Unites_en_stock");
-                    int reapro = rs.getInt("Prix_unitaire");
-                    int categorie = rs.getInt("Categorie");
-                    int unitesCmdees = rs.getInt("Unites_commandees");
-                    
-                    ProduitEntity ligne = new ProduitEntity(produitId, nom, fournisseur, categorie, qtt, prix, qttStock, reapro, unitesCmdees, dispo);
-                    result.add(ligne);
-		}
+            Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                int produitId = rs.getInt("Reference");
+                String nom = rs.getString("Nom");
+                String qtt = rs.getString("Quantite_par_unite");
+                float prix = rs.getFloat("Prix_unitaire");
+                int dispo = rs.getInt("Indisponible");
+                int fournisseur = rs.getInt("Fournisseur");
+                int qttStock = rs.getInt("Unites_en_stock");
+                int reapro = rs.getInt("Prix_unitaire");
+                int categorie = rs.getInt("Categorie");
+                int unitesCmdees = rs.getInt("Unites_commandees");
+
+                ProduitEntity ligne = new ProduitEntity(produitId, nom, fournisseur, categorie, qtt, prix, qttStock, reapro, unitesCmdees, dispo);
+                result.add(ligne);
+            }
+            connection.setAutoCommit(false);
 	}
 	return result;
     }
+    
+    
+    public List<Integer> donneIdsProd(int num)throws SQLException {
+        List<Integer> result= new LinkedList<>();
+        String sqlIdProd = "SELECT Reference FROM PRODUIT JOIN LIGNE ON Reference=Produit"
+                + "JOIN COMMANDE ON Commande=Numero WHERE Numero=?";
+        try (Connection connection = myDataSource.getConnection();
+            PreparedStatement stmtIdProd = connection.prepareStatement(sqlIdProd)) {
+            stmtIdProd.setInt(1, num);
+            ResultSet rs = stmtIdProd.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("Reference");
+                result.add(id);
+            }
+            connection.setAutoCommit(false);
+        }   
+        return result;
+    }
+    
+    public int modifQttProd(int ref)throws SQLException {
+        int result = 0;
+        String sql = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees-1 WHERE Reference=?";
+      
+        try (Connection myConnectionMAJ = myDataSource.getConnection();
+            PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sql)) {
+            // mise à jour dunb d'unités commandées
+            myConnectionMAJ.setAutoCommit(false);
+            stmtMAJ.setInt(1, ref);
+
+            result = stmtMAJ.executeUpdate();
+
+        }
+        return result;
+    }
+    
     
     /**
      * Ajoute une commande en créanr une clé automatiquement
@@ -270,13 +306,10 @@ public class DAO {
      * @param remise
      * @throws SQLException 
      */
-    public void ajoutCommande(String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
+    public int ajoutCommande(String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
+        int result = 0;
         String sql = "INSERT INTO Commande(Client, Saisie_le, Envoyee_le, Port, Destinataire, Adresse_livraison, Ville_livraison,"
                 + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        String sqlIdProd = "SELECT Reference FROM PRODUIT JOIN LIGNE ON Reference=Produit"
-                + "JOIN COMMANDE ON Commande=Numero WHERE Numero=?";
-        String sqlUnites = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees-1 WHERE Reference=?";
         
         try (Connection myConnection = myDataSource.getConnection();
             PreparedStatement stmt = myConnection.prepareStatement(sql)) {
@@ -305,27 +338,12 @@ public class DAO {
                 
                 
                 /**MODIF DU NB D UNITES COMMANDEES DS PRODUIT*/
-                //récuperer l'id du produit
-                int resultIdProd = 0;
-                try (Connection myConnectionIdProd = myDataSource.getConnection();
-                    PreparedStatement stmtIdProd = myConnectionIdProd.prepareStatement(sqlIdProd)) {
+                //récuperer les id du produit
+                List<Integer> idProd = donneIdsProd(cleID);
                     
-                    myConnectionIdProd.setAutoCommit(false);
-                    stmtIdProd.setInt(1, cleID);
-                    ResultSet rs = stmtIdProd.executeQuery();
-                    resultIdProd = rs.getInt("Reference");
-                    
-                    /**MODIF DU NB D UNITES COMMANDEES DS PROSUIT*/
-                    try (Connection myConnectionMAJ = myDataSource.getConnection();
-                        PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sqlUnites)) {
-                        // mise à jour dunb d'unités commandées
-                        myConnectionMAJ.setAutoCommit(false);
-                        stmtMAJ.setInt(1, resultIdProd);
-                        
-                        stmtMAJ.executeUpdate();
-                        
-                    }
-                }
+                /**MODIF DU NB D UNITES COMMANDEES DS PROSUIT*/
+                modifQttProd(0);
+                
                 // Tout s'est bien passé, on peut valider la transaction
                 myConnection.commit();
             } catch (Exception ex) { // Une erreur s'est produite
@@ -337,6 +355,7 @@ public class DAO {
                     myConnection.setAutoCommit(true); // On revient au mode de fonctionnement sans transaction
             }
         }
+        return result;
     }
     
     /**
