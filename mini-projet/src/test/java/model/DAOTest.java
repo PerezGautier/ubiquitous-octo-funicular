@@ -101,19 +101,15 @@ public class DAOTest {
             int id = myCustomer.getCustomerId();
             float before = myDAO.totalForCustomer(id);
             System.out.printf("Before: %f %n", before);
-
             // Un tableau de 1 productID
             int[] productIds = new int[]{0}; // Le produit 0 vaut 10 €
             // Un tableau de 1 quantites
             int[] quantities = new int[]{2};
             // On exécute la transaction
             myDAO.createInvoice(myCustomer, productIds, quantities);
-
             float after = myDAO.totalForCustomer(id);
             System.out.printf("After: %f %n", after);
-
             // Le client a maintenant 2*10€ de plus
-
             assertEquals(before + 2f * 10f, after, 0.001f);		
     }
 */

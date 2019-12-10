@@ -46,7 +46,7 @@ public class showProductFromCategory extends HttpServlet {
                 
 		try {
 			DAO dao = new DAO(DataSourceFactory.getDataSource());
-			resultat.put("records", dao.produitsDuneCategorie(cat));
+			resultat.put("records", dao.produitsDuneCategorie("nom catégorie"));
 			resultat.put("categoriesList", dao.toutesCategories());
 			
 			
