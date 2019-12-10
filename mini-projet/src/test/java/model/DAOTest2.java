@@ -127,7 +127,7 @@ public class DAOTest2 {
     
     @Test
     public void findProductFromCategorie() throws SQLException {
-            List<ProduitEntity> result = dao.produitsDuneCategorie(1);
+            List<ProduitEntity> result = dao.produitsDuneCategorie("Boissons");
             assertNotNull("Product exists, result should not be null", result);
             assertEquals(result.get(0).getNom(),"Chai");
             assertEquals(result.get(11).getNom(),"Lakkalikööri");
