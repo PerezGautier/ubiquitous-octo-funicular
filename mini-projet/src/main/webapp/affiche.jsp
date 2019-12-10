@@ -17,7 +17,7 @@
 		Vous avez maintenant accès aux fichiers dans le répertoire 
 		"<a href="<c:url value="protected/protectedPage2.html"/>">protected</a>".<br>
 
-		<form action="<c:url value="/"/>" method="POST"> 
+		<form action="<c:url value="index.html"/>" method="POST"> 
 			<input type='submit' name='action' value='logout'>
 		</form>
 		<hr/>
