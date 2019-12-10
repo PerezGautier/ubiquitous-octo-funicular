@@ -38,7 +38,6 @@ public class showProductFromCategory extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 		String param = request.getParameter("cat");
-                int cat = Integer.parseInt( param );
                 
                 
 		Properties resultat = new Properties();
@@ -46,7 +45,7 @@ public class showProductFromCategory extends HttpServlet {
                 
 		try {
 			DAO dao = new DAO(DataSourceFactory.getDataSource());
-			resultat.put("records", dao.produitsDuneCategorie("nom catégorie"));
+			resultat.put("records", dao.produitsDuneCategorie(param));
 			resultat.put("categoriesList", dao.toutesCategories());
 			
 			
