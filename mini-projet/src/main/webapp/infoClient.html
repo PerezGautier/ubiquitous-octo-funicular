@@ -40,6 +40,27 @@ and open the template in the editor.
                 });
             }
             
+            
+            
+            function modifierInfos() {
+                // On fait un appel AJAX pour modifier les informations et les 
+                // récupérer par la suite
+                $.ajax({
+                    url: "modifClient",
+                    // serialize() renvoie tous les paramètres saisis dans le formulaire
+                    data: $("#modifInfos").serialize(),
+                    dataType: "json",
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                showInfo();
+                                console.log(result);
+                            },
+                    error: showError
+                });
+                return false;
+            }
+            
+            
             // Fonction qui traite les erreurs de la requête
             function showError(xhr, status, message) {
                 alert(JSON.parse(xhr.responseText).message);
@@ -54,7 +75,7 @@ and open the template in the editor.
         <h1>Info Client : </h1>
         <form id="codeForm" onsubmit="showInfo();">
             <fieldset><legend>numero client</legend>
-            Code : <input id="code" name="code"><br/>
+            Code : <input id="code" name="code" value ="SPLIR"><br/>
             <input type="submit" value="chercher">
             </fieldset>
         </form>
@@ -65,26 +86,80 @@ and open the template in the editor.
         
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
-            <TABLE>
-            <tr><th>clientId</th><th>societe</th><th>contact</th><th>fonction</th><th>add</th><th>ville</th><th>region</th><th>cp</th><th>pays</th><th>tel</th><th>fax</th></tr>
-            {{! Pour chaque enregistrement }}
-            {{#infoClient}}
-                {{! Une ligne dans la table }}
-                <TR>
-                    <TD>{{clientId}}</TD>
-                    <TD>{{societe}}</TD>
-                    <TD>{{contact}}</TD>
-                    <TD>{{fonction}}</TD>
-                    <TD>{{add}}</TD>
-                    <TD>{{ville}}</TD>
-                    <TD>{{region}}</TD>
-                    <TD>{{cp}}</TD>
-                    <TD>{{pays}}</TD>
-                    <TD>{{tel}}</TD>
-                    <TD>{{fax}}</TD>
-                </TR>
-            {{/infoClient}}
-            </TABLE>
+            <form id="modifInfos" onsubmit="modifierInfos();">
+                <TABLE>
+                {{! Pour chaque enregistrement }}
+                {{#infoClient}}
+                    {{! Une ligne dans la table }}
+                    <TR>
+                        <th>Identifiant</th>
+                        <TD>{{clientId}}</TD>
+                        <td><input id="clientId" type="text" value="{{clientId}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Societe</th>
+                        <TD>{{societe}}</TD>
+                        <td><input id="societe" type="text" value="{{societe}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Addresse mail</th>
+                        <TD>{{contact}}</TD>
+                        <td><input id="contact" type="text" value="{{contact}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Fonction</th>
+                        <TD>{{fonction}}</TD>
+                        <td><input id="fonction" type="text" value="{{fonction}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Addresse</th>
+                        <TD>{{add}}</TD>
+                        <td><input id="add" type="text" value="{{add}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Ville</th>
+                        <TD>{{ville}}</TD>
+                        <td><input id="ville" type="text" value="{{ville}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Region</th>
+                        <TD>{{region}}</TD>
+                        <td><input id="region" type="text" value="{{region}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Code Postal</th>
+                        <TD>{{cp}}</TD>
+                        <td><input id="cp" type="text" value="{{cp}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Pays</th>
+                        <TD>{{pays}}</TD>
+                        <td><input id="pays" type="text" value="{{pays}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>Telephone</th>
+                        <TD>{{tel}}</TD>
+                        <td><input id="tel" type="text" value="{{tel}}"/></td>
+                    </tr>
+        
+                    <tr>
+                        <th>FAX</th>
+                        <TD>{{fax}}</TD>
+                        <td><input id="fax" type="text" value="{{fax}}"/></td>
+                    </tr>
+                {{/infoClient}}
+                </TABLE>
+                <input type="submit" value ="MODIFIER">
+            </form>
         </script>
     </body>
 </html>

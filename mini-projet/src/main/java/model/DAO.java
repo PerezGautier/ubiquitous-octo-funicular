@@ -381,7 +381,7 @@ public class DAO {
     }
     
     public ClientEntity unClient(String codeClient) throws SQLException {
-        ClientEntity result = new ClientEntity("","","","","","","","","","","");
+        ClientEntity result = null;
 		String sql = "SELECT * FROM Client WHERE Code = ?";
 		try (Connection connection = myDataSource.getConnection(); 
 			 PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -400,8 +400,8 @@ public class DAO {
                             String tel = rs.getString("Telephone");
                             String fax = rs.getString("Fax");
 
-                            ClientEntity client = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
-                            result = client;
+                            result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+                            
 			}
 		}
 		return result;
@@ -423,4 +423,32 @@ public class DAO {
 		return chiffreAffaires;
 		
 	}
+        
+        public CommandeEntity uneCommande(int numero) throws SQLException{
+        CommandeEntity result = null;
+        
+        String sql = "select * from Commande where Numero=?";
+        
+        try(Connection connection = myDataSource.getConnection(); 
+		 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, numero);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int num = rs.getInt("Numero");
+                String client = rs.getString("Client");
+                Date saisie = rs.getDate("Saisie_le");
+                Date envoi = rs.getDate("Envoyee_le");
+                float port = rs.getFloat("Port");
+                String dest = rs.getString("Destinataire");
+                String add = rs.getString("Adresse_livraison");
+                String ville = rs.getString("Ville_livraison");
+                String region = rs.getString("Region_livraison");
+                String cp = rs.getString("Code_Postal_livrais");
+                String pays = rs.getString("Pays_Livraison");
+                float remise = rs.getFloat("Remise");
+                result = new CommandeEntity(num,client,saisie,envoi,port,dest,add,ville,region,cp,pays,remise);
+            } 
+        }
+        return result;
+    }
 }

@@ -30,7 +30,7 @@ public class DAOTest2 {
     private static Connection myConnection ; // La connection à la BD de test
     
     
-    
+    //gautier
     private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
         // On initialise la base avec le contenu d'un fichier de test
         String sqlFilePath = DAOTest.class.getResource(filename).getFile();
@@ -142,7 +142,76 @@ public class DAOTest2 {
             assertEquals(result.get(10).getNom(),"Queso Cabrales");
             assertEquals(result.size(),77);
     }
+    //laura
+    @Test
+    public void testProduitExist() throws SQLException{
+        ProduitEntity prod = dao.unProduit(1);
+        assertNotNull("Le produit existe", prod);
+        assertEquals(prod.getNom(),"Chai");
+    }
     
+    @Test
+    public void testProduitNotExist() throws SQLException{
+        ProduitEntity prod = dao.unProduit(100);
+        assertNull("Le produit n'existe pas encore",prod);
+    }
     
+    @Test
+    public void testAjoutProduit() throws SQLException{
+        ProduitEntity prod = dao.unProduit(80);
+        assertNull("Le produit n'existe pas encore",prod);
+        int result = dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        assertEquals(result,1);
+        ProduitEntity prod80 = dao.unProduit(80);
+        assertNotNull("Le produit existe", prod80);
+    }
     
+    @Test
+    public void testSupprimerProduit() throws SQLException{
+        dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        int result = dao.supprimerProduit(80);
+        assertEquals(result,1);
+        ProduitEntity prod80 = dao.unProduit(80);
+        assertNull("Le produit n'existe pas",prod80);
+    }
+    
+    @Test
+    public void testModifierProduit() throws SQLException{
+        dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        int result = dao.modifierProduit(80,"Tablette de chocolat noir",29,2,"20 carrés par tablette", 8.00f,49,0,10,0);
+        assertEquals(result,1);
+        ProduitEntity prod80 = dao.unProduit(80);
+        assertEquals(prod80.getNom(),"Tablette de chocolat noir");
+        assertEquals(prod80.getFournisseur(),29);
+        assertEquals(prod80.getCategorie(),2);
+        assertEquals(prod80.getQuantiteUnite(),"20 carrés par tablette");
+        assertEquals(prod80.getPrix(),8.00f,0.001); //3e param est l'écart de valeur accepté pour les float
+        assertEquals(prod80.getQttStock(),49);
+        assertEquals(prod80.unitesCmdees(),0);
+        assertEquals(prod80.getReapro(),10);
+        assertEquals(prod80.getDispo(),0);
+    }
+    /**
+    @Test
+    public void testAjoutCommande() throws SQLException{
+        CommandeEntity cmd = dao.uneCommande(80);
+        assertNull("Le produit n'existe pas encore",cmd);
+        int result = dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        assertEquals(result,1);
+        ProduitEntity prod80 = dao.unProduit(80);
+        assertNotNull("Le produit existe", prod80);
+    }*/
+    
+    @Test
+    public void testClientExist() throws SQLException{
+        ClientEntity cli = dao.unClient("ALFKI");
+        assertNotNull("Le client existe", cli);
+        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+    }
+    
+    @Test
+    public void testClientNotExist() throws SQLException{
+        ClientEntity cli = dao.unClient("ATEST");
+        assertNull("Le client n'existe pas encore",cli);
+    }
 }
