@@ -8,7 +8,10 @@ package model;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.sql.DataSource;
 import org.hsqldb.cmdline.SqlFile;
@@ -230,13 +233,13 @@ public class DAOTest2 {
     @Test
     public void testQttProdNotExist() throws SQLException{
         int qtt = dao.donneQttProd(100);
-        assertNull("La quantité du produit n'existe pas encore",qtt);
+        assertEquals(-1,qtt);
     }
     
     @Test
     public void testModifierQttProduit() throws SQLException{
         dao.ajoutProduit(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
-        int result = dao.modifQttProd(80,3);
+        int result = dao.modifQttProd(80,3,true);
         assertEquals(result,1);
         int qtt = dao.donneQttProd(80);
         assertEquals(3,qtt);
@@ -252,32 +255,46 @@ public class DAOTest2 {
     @Test
     public void testLigneNotExist() throws SQLException{
         int[] ligne = dao.uneLigne(10248,60);
-        assertNull("La ligne n'existe pas encore",ligne);
+        assertEquals(0,ligne[0]);
     }
     
-    /**
+    
     @Test
     public void testAjoutLigne() throws SQLException{
-        CommandeEntity cmd = dao.uneCommande(11100);
-        assertNull("La ligne n'existe pas encore",cmd);
-        int result = dao.ajoutCommande("HILAA","2019-08-19","2019-08-24",69.00f,"Le dest","L'adresse","Leguevin",NULL,"31490","France",0.00f);
+        int[] ligne = dao.uneLigne(10248,60);
+        assertEquals(0,ligne[0]);
+        int result = dao.ajoutLigne(10248,60,4);
         assertEquals(result,1);
-        CommandeEntity cmd11100 = dao.uneLigne(11100);
-        assertNotNull("La commande existe", cmd11100);
-    }*/
-    /**
+        int[] nvLigne = dao.uneLigne(10248,60);
+        assertNotNull("La ligne existe", ligne);
+    }
+    
     @Test
-    public void testAjoutCommande() throws SQLException{
+    public void testAjoutCommande() throws SQLException, ParseException{
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("La commande n'existe pas encore",cmd);
         int[] idProd = {1};
         int[] qtt = {1};
-        int result = dao.ajoutCommande(idProd,qtt,"HILAA","2019-08-19","2019-08-24",69.00f,"Le dest","L'adresse","Leguevin","","31490","France",0.00f);
+        
+        String saisie="12-31-2014";
+        SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
+        java.util.Date date = form.parse(saisie);
+        java.sql.Date dateSaisie = new java.sql.Date(date.getTime());
+        
+        String envoi="12-31-2014";
+        date = form.parse(envoi);
+        Date dateEnvoi = new java.sql.Date(date.getTime());
+        //DETECTE PAS DATE
+        int result = dao.ajoutCommande(idProd,qtt,"HILAA",dateSaisie,dateEnvoi,69.00f,"Le dest","L'adresse","Leguevin","","31490","France",0.00f);
         assertEquals(result,1);
-        CommandeEntity cmd11100 = dao.uneCommande(11100);
+        CommandeEntity cmd11100 = dao.uneCommande(11078);
         assertNotNull("La commande existe", cmd11100);
-        assertEquals(1,donneQttProd(22));
-    }*/
+        //vérifier si les lignes ont été ajoutées
+        int[] ligne = dao.uneLigne(11078,1);
+        assertNotNull("La ligne existe", ligne);
+        //vérifier si la quantité commandée a été changée
+        assertEquals(1,dao.donneQttProd(22));
+    }
     
     @Test
     public void testClientExist() throws SQLException{
@@ -291,4 +308,22 @@ public class DAOTest2 {
         ClientEntity cli = dao.unClient("ATEST");
         assertNull("Le client n'existe pas encore",cli);
     }
+    /**
+     @Test
+    public void testModifierClient() throws SQLException{
+        //FAIRE AJOUTcLIENT
+        dao.ajoutClient(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        int result = dao.modifierClient(80,"Tablette de chocolat noir",29,2,"20 carrés par tablette", 8.00f,49,0,10,0);
+        assertEquals(result,1);
+        ClientEntity prod80 = dao.unClient(80);
+        assertEquals(prod80.getNom(),"Tablette de chocolat noir");
+        assertEquals(prod80.getFournisseur(),29);
+        assertEquals(prod80.getCategorie(),2);
+        assertEquals(prod80.getQuantiteUnite(),"20 carrés par tablette");
+        assertEquals(prod80.getPrix(),8.00f,0.001); //3e param est l'écart de valeur accepté pour les float
+        assertEquals(prod80.getQttStock(),49);
+        assertEquals(prod80.unitesCmdees(),0);
+        assertEquals(prod80.getReapro(),10);
+        assertEquals(prod80.getDispo(),0);
+    }*/
 }
