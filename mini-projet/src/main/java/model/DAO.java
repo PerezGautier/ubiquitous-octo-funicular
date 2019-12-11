@@ -256,7 +256,7 @@ public class DAO {
 	return result;
     }
     
-    
+    //INUTILE ?
     public List<Integer> donneIdsProd(int num)throws SQLException {
         List<Integer> result= new LinkedList<>();
         String sqlIdProd = "SELECT Reference FROM PRODUIT JOIN LIGNE ON Reference=Produit"
@@ -269,27 +269,77 @@ public class DAO {
                 int id = rs.getInt("Reference");
                 result.add(id);
             }
-            connection.setAutoCommit(false);
         }   
         return result;
     }
     
-    public int modifQttProd(int ref)throws SQLException {
+    public float donneQttProd(int ref)throws SQLException {
+        float result= 0; //PAS NULL ?
+        String sqlIdProd = "SELECT Unites_commandees FROM PRODUIT WHERE Reference=?";
+        try (Connection connection = myDataSource.getConnection();
+            PreparedStatement stmtIdProd = connection.prepareStatement(sqlIdProd)) {
+            stmtIdProd.setInt(1, ref);
+            ResultSet rs = stmtIdProd.executeQuery();
+            while (rs.next()) {
+                result = rs.getInt("Unites_commandees");
+            }
+        }   
+        return result;
+    }
+    
+    public int modifQttProd(int ref, int qtt)throws SQLException {
         int result = 0;
-        String sql = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees-1 WHERE Reference=?";
+        String sql = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees+? WHERE Reference=?";
       
         try (Connection myConnectionMAJ = myDataSource.getConnection();
             PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sql)) {
             // mise à jour dunb d'unités commandées
             myConnectionMAJ.setAutoCommit(false);
-            stmtMAJ.setInt(1, ref);
-
+            stmtMAJ.setInt(1, qtt);
+            stmtMAJ.setInt(2, ref);
+            
             result = stmtMAJ.executeUpdate();
-
         }
         return result;
     }
     
+    public int ajoutLigne(int idCmd, int ref, int qtt)throws SQLException {
+        int result = 0;
+        String sql = "INSERT INTO Ligne(Commande, Produit, Quantite) VALUES (?,?,?)";
+      
+        try (Connection myConnectionMAJ = myDataSource.getConnection();
+            PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sql)) {
+            // mise à jour dunb d'unités commandées
+            myConnectionMAJ.setAutoCommit(false);
+            stmtMAJ.setInt(1, idCmd);
+            stmtMAJ.setInt(2, ref);
+            stmtMAJ.setInt(3, qtt);
+            
+            result = stmtMAJ.executeUpdate();
+        }
+        return result;
+    }
+    
+    
+    public int[] uneLigne(int idCmd, int ref)throws SQLException {
+        int result[]=null; //PAS NULL ?
+        String sql = "SELECT * FROM Ligne WHERE Commande = ? AND Produit=?";
+        try (Connection connection = myDataSource.getConnection();
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idCmd);
+            stmt.setInt(2, ref);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int commande = rs.getInt("Commande");
+                int produit = rs.getInt("Produit");
+                int quantite = rs.getInt("Quantite");
+                result[0]=commande;
+                result[1]=produit;
+                result[2]=quantite;
+            }
+        }   
+        return result;
+    }
     
     /**
      * Ajoute une commande en créanr une clé automatiquement
@@ -306,7 +356,7 @@ public class DAO {
      * @param remise
      * @throws SQLException 
      */
-    public int ajoutCommande(String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
+    public int ajoutCommande(int[] tabIdProds, int[] tabQttsProd, String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
         int result = 0;
         String sql = "INSERT INTO Commande(Client, Saisie_le, Envoyee_le, Port, Destinataire, Adresse_livraison, Ville_livraison,"
                 + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -336,14 +386,15 @@ public class DAO {
                 int cleID = generatedKeys.getInt("ID");
                 Logger.getLogger("DAO").log(Level.INFO, "Nouvelle clé générée pour INVOICE : {0}", cleID);
                 
-                
+                //Ajout ligne(s)et modif qtt pr chaque produit
+                for(int i=0; i<=tabIdProds.length;i++){
+                    ajoutLigne(cleID, tabIdProds[i], tabQttsProd[i]);
+                    modifQttProd(tabIdProds[i], tabQttsProd[i]);
+                }
                 /**MODIF DU NB D UNITES COMMANDEES DS PRODUIT*/
                 //récuperer les id du produit
-                List<Integer> idProd = donneIdsProd(cleID);
-                    
-                /**MODIF DU NB D UNITES COMMANDEES DS PROSUIT*/
-                modifQttProd(0);
-                
+                //List<Integer> idProd = donneIdsProd(cleID);
+                                    
                 // Tout s'est bien passé, on peut valider la transaction
                 myConnection.commit();
             } catch (Exception ex) { // Une erreur s'est produite
