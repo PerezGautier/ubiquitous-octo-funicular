@@ -219,17 +219,17 @@ public class DAOTest2 {
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("La commande n'existe pas encore",cmd);
     }
-    
+    /*
     @Test
     public void testQttProdExist() throws SQLException{
-        int qtt = dao.donneQttProd(1);
+        float qtt = dao.donneQttProd(1);
         assertNotNull("La quantité du produit existe", qtt);
         assertEquals(0,qtt);
     }
     
     @Test
     public void testCommandeNotExist() throws SQLException{
-        int qtt = dao.donneQttProd(100);
+        float qtt = dao.donneQttProd(100);
         assertNull("La quantité du produit n'existe pas encore",qtt);
     }
     
@@ -254,7 +254,7 @@ public class DAOTest2 {
         int[] ligne = dao.uneLigne(10248,60);
         assertNull("La ligne n'existe pas encore",ligne);
     }
-    
+    */
     /**
     @Test
     public void testAjoutLigne() throws SQLException{
@@ -265,7 +265,7 @@ public class DAOTest2 {
         CommandeEntity cmd11100 = dao.uneLigne(11100);
         assertNotNull("La commande existe", cmd11100);
     }*/
-    
+    /*
     @Test
     public void testAjoutCommande() throws SQLException{
         CommandeEntity cmd = dao.uneCommande(11100);
@@ -289,4 +289,5 @@ public class DAOTest2 {
         ClientEntity cli = dao.unClient("ATEST");
         assertNull("Le client n'existe pas encore",cli);
     }
+*/
 }
