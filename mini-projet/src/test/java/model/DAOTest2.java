@@ -291,5 +291,5 @@ public class DAOTest2 {
         ClientEntity cli = dao.unClient("ATEST");
         assertNull("Le client n'existe pas encore",cli);
     }
-*/
+
 }
