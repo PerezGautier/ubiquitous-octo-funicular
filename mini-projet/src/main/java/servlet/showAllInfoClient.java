@@ -12,6 +12,8 @@ import java.util.Collections;
 // bibliothèque Google GSon
 import com.google.gson.*;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import model.DAO;
@@ -34,11 +36,13 @@ public class showAllInfoClient extends HttpServlet {
 		// Créér le DAO avec sa source de données
 		DAO dao = new DAO(DataSourceFactory.getDataSource());
                 String code = request.getParameter("code");
-		Properties resultat = new Properties();
+		Map<String, Object> resultat = new HashMap<>();
+                
 		try {
 			resultat.put("infoClient", dao.unClient(code));
                         
 		} catch (SQLException ex) {
+                    
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			resultat.put("infoClient", Collections.EMPTY_LIST);
 			resultat.put("message", ex.getMessage());
