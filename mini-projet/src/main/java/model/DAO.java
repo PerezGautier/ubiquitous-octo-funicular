@@ -274,7 +274,7 @@ public class DAO {
     }
     
     public int donneQttProd(int ref)throws SQLException {
-        int result= 0; //PAS NULL ?
+        int result= -1; //PAS NULL ?
         String sqlIdProd = "SELECT Unites_commandees FROM PRODUIT WHERE Reference=?";
         try (Connection connection = myDataSource.getConnection();
             PreparedStatement stmtIdProd = connection.prepareStatement(sqlIdProd)) {
@@ -287,16 +287,17 @@ public class DAO {
         return result;
     }
     
-    public int modifQttProd(int ref, int qtt)throws SQLException {
+    public int modifQttProd(int ref, int qtt, boolean autoCommit)throws SQLException {
         int result = 0;
-        String sql = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees+? WHERE Reference=?";
+        String sql = "UPDATE PRODUIT SET Unites_commandees = Unites_commandees+" +qtt+ " WHERE Reference=?";
       
         try (Connection myConnectionMAJ = myDataSource.getConnection();
             PreparedStatement stmtMAJ = myConnectionMAJ.prepareStatement(sql)) {
             // mise à jour dunb d'unités commandées
-            myConnectionMAJ.setAutoCommit(false);
-            stmtMAJ.setInt(1, qtt);
-            stmtMAJ.setInt(2, ref);
+            if(autoCommit==false) {
+                myConnectionMAJ.setAutoCommit(false); // pas pour les tests
+            }
+            stmtMAJ.setInt(1, ref);
             
             result = stmtMAJ.executeUpdate();
         }
@@ -322,7 +323,7 @@ public class DAO {
     
     
     public int[] uneLigne(int idCmd, int ref)throws SQLException {
-        int result[]=null; //PAS NULL ?
+        int result[]= new int [3]; //PAS NULL ?
         String sql = "SELECT * FROM Ligne WHERE Commande = ? AND Produit=?";
         try (Connection connection = myDataSource.getConnection();
             PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -359,7 +360,7 @@ public class DAO {
     public int ajoutCommande(int[] tabIdProds, int[] tabQttsProd, String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
         int result = 0;
         String sql = "INSERT INTO Commande(Client, Saisie_le, Envoyee_le, Port, Destinataire, Adresse_livraison, Ville_livraison,"
-                + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection myConnection = myDataSource.getConnection();
             PreparedStatement stmt = myConnection.prepareStatement(sql)) {
@@ -383,13 +384,13 @@ public class DAO {
                 // On a bien créé la commande, cherchons son ID	
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 generatedKeys.next();
-                int cleID = generatedKeys.getInt("ID");
+                int cleID = generatedKeys.getInt("Numero");
                 Logger.getLogger("DAO").log(Level.INFO, "Nouvelle clé générée pour INVOICE : {0}", cleID);
                 
                 //Ajout ligne(s)et modif qtt pr chaque produit
                 for(int i=0; i<=tabIdProds.length;i++){
                     ajoutLigne(cleID, tabIdProds[i], tabQttsProd[i]);
-                    modifQttProd(tabIdProds[i], tabQttsProd[i]);
+                    modifQttProd(tabIdProds[i], tabQttsProd[i],false);
                 }
                 /**MODIF DU NB D UNITES COMMANDEES DS PRODUIT*/
                 //récuperer les id du produit
