@@ -273,8 +273,8 @@ public class DAO {
         return result;
     }
     
-    public float donneQttProd(int ref)throws SQLException {
-        float result= 0; //PAS NULL ?
+    public int donneQttProd(int ref)throws SQLException {
+        int result= 0; //PAS NULL ?
         String sqlIdProd = "SELECT Unites_commandees FROM PRODUIT WHERE Reference=?";
         try (Connection connection = myDataSource.getConnection();
             PreparedStatement stmtIdProd = connection.prepareStatement(sqlIdProd)) {
