@@ -107,7 +107,7 @@ public class ProduitEntity {
         return qttStock;
     }
     
-    public int unitesCmdees() {
+    public int getUnitesCmdees() {
         return unitesCmdees;
     }
 

@@ -363,7 +363,7 @@ public class DAO {
                 + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection myConnection = myDataSource.getConnection();
-            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+            PreparedStatement stmt = myConnection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             // On démarre la transaction
             myConnection.setAutoCommit(false);
             stmt.setString(1, client);
@@ -384,7 +384,7 @@ public class DAO {
                 // On a bien créé la commande, cherchons son ID	
                 ResultSet generatedKeys = stmt.getGeneratedKeys();
                 generatedKeys.next();
-                int cleID = generatedKeys.getInt("Numero");
+                int cleID = generatedKeys.getInt(1 );
                 Logger.getLogger("DAO").log(Level.INFO, "Nouvelle clé générée pour INVOICE : {0}", cleID);
                 
                 //Ajout ligne(s)et modif qtt pr chaque produit
