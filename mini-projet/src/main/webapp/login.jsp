@@ -6,7 +6,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
                 <!-- importer le fichier de style -->
-                <link rel="stylesheet" href="css/logincss.css" media="screen" type="text/css" />
+                <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
 		<title>Please login</title>
 	</head>
 	<body>
