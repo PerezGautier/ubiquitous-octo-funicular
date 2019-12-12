@@ -327,4 +327,20 @@ public class DAOTest2 {
         assertEquals(cli.getTelephone(),"030-0074321");
         assertEquals(cli.getFax(),"030-0076545");
     }
+    
+    
+    @Test
+    public void testCaCategoriePeriode() throws SQLException, ParseException{
+        String deb="04-06-1996";
+        SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
+        java.util.Date date = form.parse(deb);
+        java.sql.Date dateDeb = new java.sql.Date(date.getTime());
+        //commande 1170 à 1173 (1seul jour)
+        String fin="04-06-1996";
+        date = form.parse(fin);
+        Date dateFin = new java.sql.Date(date.getTime());
+        
+        float ca = dao.caCategoriePeriode("Boissons",dateDeb,dateFin);
+        assertEquals(ca,39432);
+    }
 }
