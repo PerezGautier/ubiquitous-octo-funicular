@@ -1,0 +1,173 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11 déc. 2019, 14:22:24
+    Author     : Gauti
+*/
+
+body{
+    background: #87CE6B;
+}
+#container{
+    width:400px;
+    margin:0 auto;
+    margin-top:10%;
+}
+/* Bordered form */
+#container form {
+    width:100%;
+    padding: 30px;
+    border: 1px solid #f1f1f1;
+    background: #fff;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+#container h1{
+    width: 38%;
+    margin: 0 auto;
+    padding-bottom: 10px;
+}
+
+/* Full-width inputs */
+#container input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+#container input[type=submit] {
+    background-color: #53af57;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+#container input[type=submit]:hover {
+    background-color: white;
+    color: #53af57;
+    border: 1px solid #53af57;
+}
+
+
+
+
+
+/********************* Page Produits **************************/
+
+#containerProduits
+{
+    width:60%;
+    margin: 0 auto;
+    margin-top:2%;
+    background: #fff;
+    padding: 3%;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+
+
+
+
+#containerProduits h1
+{
+    margin-left: 3%;
+    font-size: 4em;
+}
+
+
+
+#containerProduits form
+{
+    margin-top: 6%;
+    width:90%;
+    padding: 3%;
+    background: #fff;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    font-size: 1.7em; 
+    color: #136F17;
+}
+
+
+
+/* Set a style for all buttons */
+#containerProduits input[type=submit] {
+    background-color: #53af57;
+    color: white;
+    margin-left:5%;
+    font-size: 0.8em;
+    padding: 10px 10px;
+    border: none;
+    cursor: pointer;
+    width: 45%;
+}
+
+
+
+#containerProduits input[type=submit]:hover {
+    background-color: white;
+    color: #136F17;
+    border: 1px solid #136F17;
+    font-weight: bold;
+}
+
+
+
+
+/* Set a style for all buttons */
+#containerProduits select {
+    margin-left:5%;
+    font-size: 0.6em;
+    padding: 10px;
+    cursor: pointer;
+    border: solid;
+    width: 35%;
+}
+
+
+
+/* Tableau de produits */
+
+#containerProduits table
+{
+    border-collapse: collapse;
+    border: solid 1px;
+    margin: 50px auto;
+    width:70%;
+    text-align: center;
+}
+
+
+#containerProduits tr:nth-child(even)
+{
+    background:#BFF7A3;
+}
+
+
+#containerProduits tr:nth-child(odd)
+{
+    background:#fff;
+}
+
+
+#containerProduits td
+{
+    border: solid 1px;
+    padding: 15px;
+}
+
+
+#containerProduits th
+{
+    font-weight: bold;
+    font-size: 1.7em;
+    border: solid 1px;
+    padding: 15px;
+}

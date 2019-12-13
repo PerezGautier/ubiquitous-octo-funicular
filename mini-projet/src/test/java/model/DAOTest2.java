@@ -197,7 +197,7 @@ public class DAOTest2 {
         assertEquals(prod80.getQuantiteUnite(),"20 carrés par tablette");
         assertEquals(prod80.getPrix(),8.00f,0.001); //3e param est l'écart de valeur accepté pour les float
         assertEquals(prod80.getQttStock(),49);
-        assertEquals(prod80.unitesCmdees(),0);
+        assertEquals(prod80.getUnitesCmdees(),0);
         assertEquals(prod80.getReapro(),10);
         assertEquals(prod80.getDispo(),0);
     }
@@ -230,8 +230,7 @@ public class DAOTest2 {
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("La commande n'existe pas encore",cmd);
     }
-
-    /*
+    
     @Test
     public void testQttProdExist() throws SQLException{
         float qtt = dao.donneQttProd(1);
@@ -334,22 +333,38 @@ public class DAOTest2 {
         assertNull("Le client n'existe pas encore",cli);
     }
     
-    /**
      @Test
     public void testModifierClient() throws SQLException{
         //FAIRE AJOUTcLIENT
-        dao.ajoutClient(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
-        int result = dao.modifierClient(80,"Tablette de chocolat noir",29,2,"20 carrés par tablette", 8.00f,49,0,10,0);
+        //dao.ajoutClient(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
+        int result = dao.modifClient("ALFKI", "Alfreds Futterkiste", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
         assertEquals(result,1);
-        ClientEntity prod80 = dao.unClient(80);
-        assertEquals(prod80.getNom(),"Tablette de chocolat noir");
-        assertEquals(prod80.getFournisseur(),29);
-        assertEquals(prod80.getCategorie(),2);
-        assertEquals(prod80.getQuantiteUnite(),"20 carrés par tablette");
-        assertEquals(prod80.getPrix(),8.00f,0.001); //3e param est l'écart de valeur accepté pour les float
-        assertEquals(prod80.getQttStock(),49);
-        assertEquals(prod80.unitesCmdees(),0);
-        assertEquals(prod80.getReapro(),10);
-        assertEquals(prod80.getDispo(),0);
-    }*/
+        ClientEntity cli = dao.unClient("ALFKI");
+        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+        assertEquals(cli.getContact(),"Maria Anders");
+        assertEquals(cli.getFonction(),"Représentant(e)");
+        assertEquals(cli.getVille(),"Berlin");
+        assertEquals(cli.getAdresse(),"Obere Str. 57");
+        assertEquals(cli.getCode_postal(),"12209");
+        assertEquals(cli.getRegion(),"Region");
+        assertEquals(cli.getPays(),"Allemagne");
+        assertEquals(cli.getTelephone(),"030-0074321");
+        assertEquals(cli.getFax(),"030-0076545");
+    }
+    
+    
+    @Test
+    public void testCaCategoriePeriode() throws SQLException, ParseException{
+        String deb="04-06-1996";
+        SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
+        java.util.Date date = form.parse(deb);
+        java.sql.Date dateDeb = new java.sql.Date(date.getTime());
+        //commande 1170 à 1173 (1seul jour)
+        String fin="04-06-1996";
+        date = form.parse(fin);
+        Date dateFin = new java.sql.Date(date.getTime());
+        
+        float ca = dao.caCategoriePeriode("Boissons",dateDeb,dateFin);
+        assertEquals(ca,39432);
+    }
 }
