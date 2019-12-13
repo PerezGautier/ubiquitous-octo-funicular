@@ -195,8 +195,7 @@ public class DAOTest2 {
         assertEquals(prod80.getDispo(),0);
     }
     
-    //Inutile ?
-    /**
+   
     @Test
     public void testProduitCmdExist() throws SQLException{
         int[] idProd = dao.donneIdsProd(10248);
@@ -209,7 +208,7 @@ public class DAOTest2 {
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("Le produit de la commande n'existe pas encore",cmd);
     }
-    */
+    
     @Test
     public void testCommandeExist() throws SQLException{
         CommandeEntity cmd = dao.uneCommande(10248);
@@ -268,7 +267,7 @@ public class DAOTest2 {
         int[] nvLigne = dao.uneLigne(10248,60);
         assertNotNull("La ligne existe", ligne);
     }
-    /**
+    
     @Test
     public void testAjoutCommande() throws SQLException, ParseException{
         CommandeEntity cmd = dao.uneCommande(11100);
@@ -285,7 +284,7 @@ public class DAOTest2 {
         assertNotNull("La ligne existe", ligne);
         //vérifier si la quantité commandée a été changée
         assertEquals(1,dao.donneQttProd(22));
-    }*/
+    }
     
     @Test
     public void testClientExist() throws SQLException{
