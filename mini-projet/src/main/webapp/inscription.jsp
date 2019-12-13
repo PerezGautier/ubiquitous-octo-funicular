@@ -3,8 +3,9 @@
     Created on : 13 déc. 2019, 17:40:26
     Author     : Gauti
 --%>
+<%@page contentType="text/html" pageEncoding="UTF-8" session="false" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +18,7 @@
                 <!-- zone de connexion -->
 
                 <form action="<c:url value="inscriptionClient" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
-                    <h1>Connexion</h1>
+                    <h1>Inscription</h1>
 
                     <label><b>Nom d'utilisateur</b></label>
                     <input type="text" placeholder="contact" name="loginParam" required>
