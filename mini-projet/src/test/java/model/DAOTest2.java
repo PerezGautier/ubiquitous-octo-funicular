@@ -320,7 +320,7 @@ public class DAOTest2 {
         assertEquals(cli.getFonction(),"Représentant(e)");
         assertEquals(cli.getVille(),"Berlin");
         assertEquals(cli.getAdresse(),"Obere Str. 57");
-        assertEquals(cli.getCode_postal(),"12209");
+        assertEquals(cli.getCode_postal().trim(),"12209");
         assertEquals(cli.getRegion(),"Region");
         assertEquals(cli.getPays(),"Allemagne");
         assertEquals(cli.getTelephone(),"030-0074321");
