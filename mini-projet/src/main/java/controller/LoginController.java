@@ -35,6 +35,9 @@ public class LoginController extends HttpServlet {
 				case "logout":
 					doLogout(request);
 					break;
+                                case "subscribe":
+					doSubscribe(request);
+					break;
 			}
 		}
 
@@ -145,4 +148,19 @@ public class LoginController extends HttpServlet {
 		return (session == null) ? null : (String) session.getAttribute("userName");
 	}
 
+        private void doSubscribe(HttpServletRequest request) {
+		String loginParam = request.getParameter("contactParam");
+		String passwordParam = request.getParameter("passwordParam");
+                String societeParam = request.getParameter("societeParam");
+                String fonctionParam = request.getParameter("fonctionParam");
+		String adresseParam = request.getParameter("adresseParam");
+		String villeParam = request.getParameter("villeParam");
+		String regionParam = request.getParameter("regionParam");
+                String cpParam = request.getParameter("cpParam");
+		String paysParam = request.getParameter("paysParam");
+                String telParam = request.getParameter("telParam");
+		String faxParam = request.getParameter("faxParam");
+		
+                
+	}
 }

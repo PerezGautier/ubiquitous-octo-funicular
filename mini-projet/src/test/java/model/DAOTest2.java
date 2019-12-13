@@ -252,7 +252,7 @@ public class DAOTest2 {
         int qtt = dao.donneQttProd(80);
         assertEquals(3,qtt);
     }
-    */
+    
 
     @Test
     public void testLigneExist() throws SQLException{
@@ -352,6 +352,15 @@ public class DAOTest2 {
         assertEquals(cli.getFax(),"030-0076545");
     }
     
+    @Test
+    public void testAjoutClient() throws SQLException{
+        ClientEntity client = dao.unClient("AAAAA");
+        assertNull("Le client n'existe pas encore",client);
+        int result = dao.ajoutClient("AAAAA","Termitator","robert","exterminateur","avenue des termites","zoobiland","parlà","15420","danscepays","0524262524","fax");
+        assertEquals(result,1);
+        ClientEntity clientAAAA = dao.unClient("AAAAA");
+        assertNotNull("Le produit existe", clientAAAA);
+    }
     
     @Test
     public void testCaCategoriePeriode() throws SQLException, ParseException{
