@@ -17,7 +17,7 @@
         <div id="container">
                 <!-- zone de connexion -->
 
-                <form action="<c:url value="inscriptionClient" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
+                <form action="<c:url value="InscriptionClientController" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
                     <h1>Inscription</h1>
 
                     <label><b>Nom d'utilisateur</b></label>

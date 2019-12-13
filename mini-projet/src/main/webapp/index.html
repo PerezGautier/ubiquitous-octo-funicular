@@ -9,18 +9,53 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <link rel="stylesheet" href="css/index.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
+
+        <script>
+            $(document).ready(// Exécuté à la fin du chargement de la page
+                    function () {
+                        // On montre la liste des codes
+                        showCat();
+                    }
+            );
+
+            function showCat() {
+                // On fait un appel AJAX pour chercher les codes
+                $.ajax({
+                    url: "showAllCategorie",
+                    dataType: "json",
+                    error: showError,
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                // Le code source du template est dans la page
+                                var template = $('#codesTemplate').html();
+                                // On combine le template avec le résultat de la requête
+                                var processedTemplate = Mustache.to_html(template, result);
+                                // On affiche la liste des options dans le select
+                                $('#codes').html(processedTemplate);
+                            }
+                });
+            }
+            
+            // Fonction qui traite les erreurs de la requête
+            function showError(xhr, status, message) {
+                alert(JSON.parse(xhr.responseText).message);
+            }
+
+       </script>     
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script> 
+       
     </head>
     <body>
-        <div>Page Index</div>
-        <div>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#news">News</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li style="float:right"><a class="active" href="#about">About</a></li>
-            </ul> 
-        </div>
+         <div class="header">
+            <a href="index.html" class="logo">CompanyLogo</a>
+            <div class="header-right">
+              <a class="active" href="login.jsp">Log In</a>
+              <a href="inscription.jsp">Sign On</a>
+            </div>
+          </div> 
         <div>
             <a href="indexCategorie.html">Liste des Catégories</a>
             <a href="indexProduits.html">Liste des Produits</a>
@@ -31,6 +66,20 @@ and open the template in the editor.
         </div>
         <div>
             <a href="inscription.jsp">sign in</a>
+        </div>
+        <div>
+            <script id="codesTemplate" type="text/template">
+            <TABLE>
+            <tr><th>Catégories</th></tr>
+            {{! Pour chaque enregistrement }}
+            {{#categoriesList}}
+                {{! Une ligne dans la table }}
+                <TR>
+                    <TD>{{.}}</TD>
+                </TR>
+            {{/categoriesList}}
+            </TABLE>
+        </script>
         </div>
     </body>
 </html>

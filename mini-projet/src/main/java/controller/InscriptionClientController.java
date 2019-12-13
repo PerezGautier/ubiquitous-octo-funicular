@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlet;
+package controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.DAO;
 import model.DataSourceFactory;
 
-public class inscriptionClient extends HttpServlet {
+public class InscriptionClientController extends HttpServlet {
 
     /**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
