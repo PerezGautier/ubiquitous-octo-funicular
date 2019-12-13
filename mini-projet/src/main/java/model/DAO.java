@@ -490,6 +490,34 @@ public class DAO {
             }
             return result;
     }
+    
+
+    public int ajoutClient(String Code, String Societe, String Contact, String Fonction, String Adresse, String Ville,
+            String Region, String Code_postal, String Pays, String Telephone, String Fax) throws SQLException {
+		String sql = "INSERT INTO Client VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		int result =0;
+		try (Connection myConnection = myDataSource.getConnection();
+                    PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+
+                    stmt.setString(1, Code);
+                    stmt.setString(2, Societe);
+                    stmt.setString(3, Contact);
+                    stmt.setString(4, Fonction);
+                    stmt.setString(5, Adresse);
+                    stmt.setString(6, Ville);
+                    stmt.setString(7, Region);
+                    stmt.setString(8, Code_postal);
+                    stmt.setString(9, Pays);
+                    stmt.setString(10, Telephone);
+                    stmt.setString(11, Fax);
+
+                    result = stmt.executeUpdate();
+
+                    myConnection.commit();
+		}
+        return result;
+    }
+    
     /*format de la date "yyyy-mm-dd"*/
     public float caCategoriePeriode(int codeCategorie, String deb, String fin) throws SQLException {
         float chiffreAffaires = 0;

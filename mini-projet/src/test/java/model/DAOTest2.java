@@ -195,14 +195,15 @@ public class DAOTest2 {
         assertEquals(prod80.getDispo(),0);
     }
     
-   
+   /*
     @Test
     public void testProduitCmdExist() throws SQLException{
         int[] idProd = dao.donneIdsProd(10248);
         assertNotNull("Le produit de la commande existe", idProd);
         assertEquals(idsProd,10248);
     }
-    
+    */
+    /*
     @Test
     public void testProduitCmdNotExist() throws SQLException{
         CommandeEntity cmd = dao.uneCommande(11100);
@@ -285,7 +286,7 @@ public class DAOTest2 {
         //vérifier si la quantité commandée a été changée
         assertEquals(1,dao.donneQttProd(22));
     }
-    
+    */
     @Test
     public void testClientExist() throws SQLException{
         ClientEntity cli = dao.unClient("ALFKI");
@@ -310,7 +311,7 @@ public class DAOTest2 {
         assertNull("Le client n'existe pas encore",cli2);
     }
     
-     @Test
+    @Test
     public void testModifierClient() throws SQLException{
         int result = dao.modifClient("ALFKI", "Une société", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
         assertEquals(result,1);
@@ -325,6 +326,16 @@ public class DAOTest2 {
         assertEquals(cli.getPays(),"Allemagne");
         assertEquals(cli.getTelephone(),"030-0074321");
         assertEquals(cli.getFax(),"030-0076545");
+    }
+
+    @Test
+    public void testAjoutClient() throws SQLException{
+        ClientEntity cli = dao.unClient("AAAAA");
+        assertNull("Le client n'existe pas encore",cli);
+        int result = dao.ajoutClient("AAAAA", "Une société", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
+        assertEquals(result,1);
+        cli = dao.unClient("AAAAA");
+        assertEquals(cli.getSociete(),"Une société");
     }
     
     @Test
@@ -347,4 +358,5 @@ public class DAOTest2 {
         float ca = dao.caClientPeriode("LILAS","1996-05-29","1996-06-10");
         assertEquals(3806, ca,0.1);//
     }
+    
 }
