@@ -227,7 +227,7 @@ public class DAOTest2 {
     public void testQttProdExist() throws SQLException{
         float qtt = dao.donneQttProd(1);
         assertNotNull("La quantité du produit existe", qtt);
-        assertEquals(0,qtt);
+        assertEquals(0,qtt,0.0);
     }
     
     @Test
@@ -268,7 +268,7 @@ public class DAOTest2 {
         int[] nvLigne = dao.uneLigne(10248,60);
         assertNotNull("La ligne existe", ligne);
     }
-    
+    /**
     @Test
     public void testAjoutCommande() throws SQLException, ParseException{
         CommandeEntity cmd = dao.uneCommande(11100);
@@ -276,16 +276,7 @@ public class DAOTest2 {
         int[] idProd = {1};
         int[] qtt = {1};
         
-        String saisie="12-31-2014";
-        SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
-        java.util.Date date = form.parse(saisie);
-        java.sql.Date dateSaisie = new java.sql.Date(date.getTime());
-        
-        String envoi="12-31-2014";
-        date = form.parse(envoi);
-        Date dateEnvoi = new java.sql.Date(date.getTime());
-        //DETECTE PAS DATE
-        int result = dao.ajoutCommande(idProd,qtt,"HILAA",dateSaisie,dateEnvoi,69.00f,"Le dest","L'adresse","Leguevin","","31490","France",0.00f);
+        int result = dao.ajoutCommande(idProd,qtt,"HILAA","2014-12-31","2014-12-31",69.00f,"Le dest","L'adresse","Leguevin","","31490","France",0.00f);
         assertEquals(result,1);
         CommandeEntity cmd11100 = dao.uneCommande(11078);
         assertNotNull("La commande existe", cmd11100);
@@ -294,7 +285,7 @@ public class DAOTest2 {
         assertNotNull("La ligne existe", ligne);
         //vérifier si la quantité commandée a été changée
         assertEquals(1,dao.donneQttProd(22));
-    }
+    }*/
     
     @Test
     public void testClientExist() throws SQLException{
@@ -309,14 +300,23 @@ public class DAOTest2 {
         assertNull("Le client n'existe pas encore",cli);
     }
     
+    @Test
+    public void testSuppClient()throws SQLException{
+        ClientEntity cli = dao.unClient("ALFKI");
+        assertNotNull("Le client existe", cli);
+        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+        int nbSuppressions = dao.supprimerClient("ALFKI");
+        assertEquals(nbSuppressions,1);
+        ClientEntity cli2 = dao.unClient("ALFKI");
+        assertNull("Le client n'existe pas encore",cli2);
+    }
+    
      @Test
     public void testModifierClient() throws SQLException{
-        //FAIRE AJOUTcLIENT
-        //dao.ajoutClient(80,"Tablette chocolat",29,2,"20carrés par tablette", (float) 8.00,49,0,10,0);
-        int result = dao.modifClient("ALFKI", "Alfreds Futterkiste", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
+        int result = dao.modifClient("ALFKI", "Une société", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
         assertEquals(result,1);
         ClientEntity cli = dao.unClient("ALFKI");
-        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+        assertEquals(cli.getSociete(),"Une société");
         assertEquals(cli.getContact(),"Maria Anders");
         assertEquals(cli.getFonction(),"Représentant(e)");
         assertEquals(cli.getVille(),"Berlin");
@@ -328,19 +328,24 @@ public class DAOTest2 {
         assertEquals(cli.getFax(),"030-0076545");
     }
     
-    
     @Test
     public void testCaCategoriePeriode() throws SQLException, ParseException{
-        String deb="04-06-1996";
-        SimpleDateFormat form = new SimpleDateFormat("MM-dd-yyyy");
-        java.util.Date date = form.parse(deb);
-        java.sql.Date dateDeb = new java.sql.Date(date.getTime());
         //commande 1170 à 1173 (1seul jour)
-        String fin="04-06-1996";
-        date = form.parse(fin);
-        Date dateFin = new java.sql.Date(date.getTime());
-        
-        float ca = dao.caCategoriePeriode("Boissons",dateDeb,dateFin);
-        assertEquals(ca,39432);
+        float ca = dao.caCategoriePeriode(1,"1996-06-04","1996-06-04");
+        assertEquals(6700, ca,0.1);//
+    }
+    
+    @Test
+    public void testCaPaysPeriode() throws SQLException, ParseException{
+        //commande 1170 à 1173 (1seul jour)
+        float ca = dao.caPaysPeriode("Mexique","1996-06-01","1996-06-10");
+        assertEquals(3290, ca,0.1);//
+    }
+    
+    @Test
+    public void testCaClientPeriode() throws SQLException, ParseException{
+        //commande 1170 à 1173 (1seul jour)
+        float ca = dao.caClientPeriode("LILAS","1996-05-29","1996-06-10");
+        assertEquals(3806, ca,0.1);//
     }
 }

@@ -357,7 +357,7 @@ public class DAO {
      * @param remise
      * @throws SQLException 
      */
-    public int ajoutCommande(int[] tabIdProds, int[] tabQttsProd, String client, Date dateSaisie, Date dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
+    public int ajoutCommande(int[] tabIdProds, int[] tabQttsProd, String client, String dateSaisie, String dateEnvoi, float port, String dest, String add, String ville, String region, String cp, String pays, float remise) throws SQLException {
         int result = 0;
         String sql = "INSERT INTO Commande(Client, Saisie_le, Envoyee_le, Port, Destinataire, Adresse_livraison, Ville_livraison,"
                 + " Region_livraison, Code_Postal_livrais, Pays_Livraison, Remise) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -367,8 +367,8 @@ public class DAO {
             // On démarre la transaction
             myConnection.setAutoCommit(false);
             stmt.setString(1, client);
-            stmt.setDate(2, dateSaisie);
-            stmt.setDate(3, dateEnvoi);
+            stmt.setString(2, dateSaisie);
+            stmt.setString(3, dateEnvoi);
             stmt.setFloat(4, port);
             stmt.setString(5, dest);
             stmt.setString(6, add);
@@ -427,7 +427,7 @@ public class DAO {
      */
     public int modifClient(String Code, String Societe, String Contact, String Fonction, String Adresse, String Ville,
             String Region, String Code_postal, String Pays, String Telephone, String Fax) throws SQLException {
-		String sql = "UPDATE CLIENT SET Societe=?, Contact=?, Fonction=?, Adresse=?, Ville=?, Region=?, Code_postal=?, Pays=?, Telephone=?, Fax=?,  WHERE Code = ?";
+		String sql = "UPDATE CLIENT SET Societe=?, Contact=?, Fonction=?, Adresse=?, Ville=?, Region=?, Code_postal=?, Pays=?, Telephone=?, Fax=?  WHERE Code = ?";
 		int result =0;
 		try (Connection myConnection = myDataSource.getConnection();
                     PreparedStatement stmt = myConnection.prepareStatement(sql)) {
@@ -451,75 +451,124 @@ public class DAO {
         return result;
     }
     
-    public ClientEntity unClient(String codeClient) throws SQLException {
-        ClientEntity result = null;
-		String sql = "SELECT * FROM Client WHERE Code = ?";
-		try (Connection connection = myDataSource.getConnection(); 
-			 PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, codeClient);
-			ResultSet rs = stmt.executeQuery();
-			while (rs.next()) {
-                            String clientId = rs.getString("Code");
-                            String societe = rs.getString("Societe");
-                            String contact = rs.getString("Contact");
-                            String fonction = rs.getString("Fonction");
-                            String add = rs.getString("Adresse");
-                            String ville = rs.getString("Ville");
-                            String region = rs.getString("Region");
-                            String cp = rs.getString("Code_postal");
-                            String pays = rs.getString("Pays");
-                            String tel = rs.getString("Telephone");
-                            String fax = rs.getString("Fax");
+    public int supprimerClient(String Code) throws SQLException {
+        String sql = "DELETE FROM CLIENT WHERE Code = ?";
+        int result =0;
+        try (Connection myConnection = myDataSource.getConnection();
+            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
 
-                            result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
-                            
-			}
-		}
-		return result;
-    }
-	
-	public float caCategoriePeriode(String libCategorie, Date deb, Date fin) throws SQLException {
-		float chiffreAffaires = 0;
-		String sql = "SELECT SUM Prix_unitaire AS CA FROM Produit" +
-                            "JOIN Ligne ON Reference=Produit JOIN Commande ON Commande=numero WHERE Libelle = ?" +
-                            "WHERE Categorie = ? AND Saisie_le > ? AND Saisie_le < ?";
-		try (Connection connection = myDataSource.getConnection(); 
-			 PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, libCategorie);
-			stmt.setDate(2, deb);
-			stmt.setDate(3, fin);
-			ResultSet rs = stmt.executeQuery();
-			chiffreAffaires = rs.getFloat("CA");
-		}
-		return chiffreAffaires;
-		
-	}
-        
-        public CommandeEntity uneCommande(int numero) throws SQLException{
-        CommandeEntity result = null;
-        
-        String sql = "select * from Commande where Numero=?";
-        
-        try(Connection connection = myDataSource.getConnection(); 
-		 PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, numero);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                int num = rs.getInt("Numero");
-                String client = rs.getString("Client");
-                Date saisie = rs.getDate("Saisie_le");
-                Date envoi = rs.getDate("Envoyee_le");
-                float port = rs.getFloat("Port");
-                String dest = rs.getString("Destinataire");
-                String add = rs.getString("Adresse_livraison");
-                String ville = rs.getString("Ville_livraison");
-                String region = rs.getString("Region_livraison");
-                String cp = rs.getString("Code_Postal_livrais");
-                String pays = rs.getString("Pays_Livraison");
-                float remise = rs.getFloat("Remise");
-                result = new CommandeEntity(num,client,saisie,envoi,port,dest,add,ville,region,cp,pays,remise);
-            } 
+            stmt.setString(1, Code);
+            result = stmt.executeUpdate();
+            myConnection.commit();
         }
         return result;
+    }
+    
+    public ClientEntity unClient(String codeClient) throws SQLException {
+        ClientEntity result = null;
+            String sql = "SELECT * FROM Client WHERE Code = ?";
+            try (Connection connection = myDataSource.getConnection(); 
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, codeClient);
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                    String clientId = rs.getString("Code");
+                    String societe = rs.getString("Societe");
+                    String contact = rs.getString("Contact");
+                    String fonction = rs.getString("Fonction");
+                    String add = rs.getString("Adresse");
+                    String ville = rs.getString("Ville");
+                    String region = rs.getString("Region");
+                    String cp = rs.getString("Code_postal");
+                    String pays = rs.getString("Pays");
+                    String tel = rs.getString("Telephone");
+                    String fax = rs.getString("Fax");
+
+                    result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+
+                }
+            }
+            return result;
+    }
+    /*format de la date "yyyy-mm-dd"*/
+    public float caCategoriePeriode(int codeCategorie, String deb, String fin) throws SQLException {
+        float chiffreAffaires = 0;
+        String sql = "SELECT SUM(Prix_unitaire*Quantite) AS CA FROM Produit " +
+                    "JOIN Ligne ON Reference=Produit JOIN Commande ON Commande=numero " +
+                    "WHERE Categorie = ? AND Saisie_le >= ? AND Saisie_le <= ?";
+        try (Connection connection = myDataSource.getConnection(); 
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setInt(1, codeCategorie);
+                stmt.setString(2, deb);
+                stmt.setString(3, fin);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                chiffreAffaires = rs.getFloat("CA");
+        }
+        return chiffreAffaires;
+
+    }
+    
+    public float caPaysPeriode(String pays, String deb, String fin) throws SQLException {
+        float chiffreAffaires = 0;
+        String sql = "SELECT SUM(Prix_unitaire*Quantite) AS CA FROM Produit " +
+                    "JOIN Ligne ON Reference=Produit JOIN Commande ON Commande=numero " +
+                    "WHERE Pays_livraison = ? AND Saisie_le >= ? AND Saisie_le <= ?";
+        try (Connection connection = myDataSource.getConnection(); 
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, pays);
+                stmt.setString(2, deb);
+                stmt.setString(3, fin);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                chiffreAffaires = rs.getFloat("CA");
+        }
+        return chiffreAffaires;
+
+    }
+    public float caClientPeriode(String pays, String deb, String fin) throws SQLException {
+        float chiffreAffaires = 0;
+        String sql = "SELECT SUM(Prix_unitaire*Quantite) AS CA FROM Produit " +
+                    "JOIN Ligne ON Reference=Produit JOIN Commande ON Commande=numero JOIN CLIENT ON Client=Code " +
+                    "WHERE Code = ? AND Saisie_le >= ? AND Saisie_le <= ?";
+        try (Connection connection = myDataSource.getConnection(); 
+                PreparedStatement stmt = connection.prepareStatement(sql)) {
+                stmt.setString(1, pays);
+                stmt.setString(2, deb);
+                stmt.setString(3, fin);
+                ResultSet rs = stmt.executeQuery();
+                rs.next();
+                chiffreAffaires = rs.getFloat("CA");
+        }
+        return chiffreAffaires;
+
+    }
+
+    public CommandeEntity uneCommande(int numero) throws SQLException{
+    CommandeEntity result = null;
+
+    String sql = "select * from Commande where Numero=?";
+
+    try(Connection connection = myDataSource.getConnection(); 
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        stmt.setInt(1, numero);
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            int num = rs.getInt("Numero");
+            String client = rs.getString("Client");
+            Date saisie = rs.getDate("Saisie_le");
+            Date envoi = rs.getDate("Envoyee_le");
+            float port = rs.getFloat("Port");
+            String dest = rs.getString("Destinataire");
+            String add = rs.getString("Adresse_livraison");
+            String ville = rs.getString("Ville_livraison");
+            String region = rs.getString("Region_livraison");
+            String cp = rs.getString("Code_Postal_livrais");
+            String pays = rs.getString("Pays_Livraison");
+            float remise = rs.getFloat("Remise");
+            result = new CommandeEntity(num,client,saisie,envoi,port,dest,add,ville,region,cp,pays,remise);
+        } 
+    }
+    return result;
     }
 }
