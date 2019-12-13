@@ -16,7 +16,7 @@
 
                 <form action="<c:url value="LoginController" />" method="POST"> <!-- l'action par défaut est l'URL courant, qui va rappeler la servlet -->
                     <h1>Connexion</h1>
-
+                    <div style="color:red">${errorMessage}</div>
                     <label><b>Nom d'utilisateur</b></label>
                     <input type="text" placeholder="untel" name="loginParam" required>
 

@@ -14,7 +14,7 @@ import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.Properties;
 
-import model.DAO;
+import model.DAOProduit;
 import model.DataSourceFactory;
 
 @WebServlet(name = "indexServlet", urlPatterns = {"/indexServlet"})
@@ -32,7 +32,7 @@ public class showAllProduct extends HttpServlet {
 		throws ServletException, IOException {
 
 		// Créér le DAO avec sa source de données
-		DAO dao = new DAO(DataSourceFactory.getDataSource());
+		DAOProduit dao = new DAOProduit(DataSourceFactory.getDataSource());
 
 		Properties resultat = new Properties();
 		try {

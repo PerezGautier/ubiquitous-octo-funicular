@@ -20,6 +20,7 @@ import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -111,8 +112,14 @@ public class DAOTest2 {
         assertEquals(cat12.getLibelle(),"a");
         assertEquals(cat12.getDescription(),"un beau a");
     }
-    
-    
+    @Test
+    public void testIsClient() throws SQLException{
+        
+        boolean result = dao.isClient("ALFKI","Maria Anders");
+        assertTrue(result);
+    }
+   
+
     @Test
     public void findAllCategorie() throws SQLException {
             List<String> result = dao.toutesCategories();
@@ -209,19 +216,21 @@ public class DAOTest2 {
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("Le produit de la commande n'existe pas encore",cmd);
     }
-    */
+    
     @Test
     public void testCommandeExist() throws SQLException{
         CommandeEntity cmd = dao.uneCommande(10248);
         assertNotNull("La commande existe", cmd);
         assertEquals(cmd.getClient(),"VINET");
     }
-    
+    */
+
     @Test
     public void testCommandeNotExist() throws SQLException{
         CommandeEntity cmd = dao.uneCommande(11100);
         assertNull("La commande n'existe pas encore",cmd);
     }
+
     /*
     @Test
     public void testQttProdExist() throws SQLException{
@@ -244,7 +253,8 @@ public class DAOTest2 {
         int qtt = dao.donneQttProd(80);
         assertEquals(3,qtt);
     }
-    
+    */
+
     @Test
     public void testLigneExist() throws SQLException{
         int[] ligne = dao.uneLigne(10248,11);
@@ -258,6 +268,12 @@ public class DAOTest2 {
         assertEquals(0,ligne[0]);
     }
     
+/************************************************************************
+
+    TestUneLigne -> renvoie une ligne spécifique d'une commande
+    TestSupprimerLigne -> supprime une ligne spécifique d'une commande
+
+*************************************************************************/
     
     @Test
     public void testAjoutLigne() throws SQLException{
@@ -268,6 +284,16 @@ public class DAOTest2 {
         int[] nvLigne = dao.uneLigne(10248,60);
         assertNotNull("La ligne existe", ligne);
     }
+
+
+/************************************************************************
+
+    TestUneCommande -> renvoie une commande spécifique d'une entreprise
+    TestSupprimerCommande -> supprime une commande spécifique d'une entreprise
+    TestToutesLesCommandes -> renvoie toutes les commandes d'une entreprise
+    TestModifierUneCommande -> modifie une commande spécifique d'une entreprise
+
+*************************************************************************/
     
     @Test
     public void testAjoutCommande() throws SQLException, ParseException{
@@ -295,7 +321,6 @@ public class DAOTest2 {
         //vérifier si la quantité commandée a été changée
         assertEquals(1,dao.donneQttProd(22));
     }
-    
     @Test
     public void testClientExist() throws SQLException{
         ClientEntity cli = dao.unClient("ALFKI");
@@ -308,6 +333,7 @@ public class DAOTest2 {
         ClientEntity cli = dao.unClient("ATEST");
         assertNull("Le client n'existe pas encore",cli);
     }
+    
     /**
      @Test
     public void testModifierClient() throws SQLException{
