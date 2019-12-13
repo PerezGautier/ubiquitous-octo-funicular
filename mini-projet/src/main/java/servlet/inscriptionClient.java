@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import model.DAO;
 import model.DataSourceFactory;
 
-public class inscriptionClientController extends HttpServlet {
+public class inscriptionClient extends HttpServlet {
 
     /**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -33,14 +33,6 @@ public class inscriptionClientController extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 		throws ServletException, IOException {
 
-                String action = request.getParameter("action");
-		if (null != action) {
-			switch (action) {
-				case "subscribe":
-					checkLogin(request);
-					break;
-			}
-		}
 
 		String loginParam = request.getParameter("loginParam");
                 String passwordParam = request.getParameter("passwordParam");
