@@ -17,7 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import model.DAOProduit;
+import model.DAO;
 import model.DataSourceFactory;
 
 /**
@@ -44,7 +44,7 @@ public class showProductFromCategory extends HttpServlet {
                 
                 
 		try {
-			DAOProduit dao = new DAOProduit(DataSourceFactory.getDataSource());
+			DAO dao = new DAO(DataSourceFactory.getDataSource());
 			resultat.put("records", dao.produitsDuneCategorie(param));
 			resultat.put("categoriesList", dao.toutesCategories());
 			
