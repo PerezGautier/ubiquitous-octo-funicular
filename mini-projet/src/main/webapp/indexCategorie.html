@@ -57,15 +57,18 @@ and open the template in the editor.
         
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
-            <table>
+            <TABLE>
+            <tr><th>Code</th><th>Nom</th><th>Prix</th></tr>
             {{! Pour chaque enregistrement }}
-            {{#categoriesList}}
+            {{#records}}
                 {{! Une ligne dans la table }}
-                <tr>
-                    <td><a href=\"{{.}}\">{{.}}</a></td>
-                </tr>
-            {{/categoriesList}}
-            </table>
+                <TR>
+                    <TD><b>{{produitId}} </b></TD>
+                    <TD>{{nom}} </TD>
+                    <TD>{{prix}} €</TD>
+                </TR>
+            {{/records}}
+            </TABLE>
         </script>
                
     </body>

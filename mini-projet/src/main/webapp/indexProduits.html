@@ -10,6 +10,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
         <!-- importer le fichier de style -->
         <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
         <script>
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
@@ -21,7 +22,7 @@
             function showCode() {
                 // On fait un appel AJAX pour chercher les codes
                 $.ajax({
-                    url: "indexServlet",
+                    url: "showAllProduct",
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats
@@ -40,7 +41,26 @@
                 });
             }
             
-            
+            // Montre les produits d'une catégorie
+            function selectCat() {
+                $.ajax({
+                    url: "showProductFromCategory",
+                    // serialize() renvoie tous les paramètres saisis dans le formulaire
+                    data: $("#codeForm").serialize(),
+                    dataType: "json",
+                    error: showError,
+                    success: // La fonction qui traite les résultats
+                            function (result) {
+                                // Le code source du template est dans la page
+                                var template = $('#codesTemplate').html();
+                                // On combine le template avec le résultat de la requête
+                                var processedTemplate = Mustache.to_html(template, result);
+                                // On affiche la liste des options dans le select
+                                $('#codes').html(processedTemplate);
+                            }
+                });
+                return false;
+            }
             
             
             // Fonction qui traite les erreurs de la requête
@@ -53,18 +73,21 @@
         <link rel="stylesheet" type="text/css" href="css/tableformat.css">
     </head>
     <body>
+        <div class="header">
+            <a href="index.html" class="logo">CompanyLogo</a>
+            <div class="header-right">
+              <a class="active" href="login.jsp">Log In</a>
+              <a href="inscription.jsp">Sign On</a>
+            </div>
+         </div> 
         <div id="containerProduits">
-        <!-- On montre le formulaire de saisie -->
-        <h1>Produits en vente : </h1>
-        
-        
+        <!-- On montre le formulaire de saisie --> 
         <!-- Le template qui sert à afficher la liste des categories -->
         <script id="categoriesTemplate" type="text/template">
-            <form>
-            <b>Sélectionnez une catégorie de produits :</b><br/><br/>
-                <select>
+            <form id="codeForm" onsubmit="event.preventDefault(); selectCat();">
+                <select name="cat">
                     {{#categoriesList}}
-                        <option value={{.}}>{{.}}</option>
+                        <option value="{{.}}">{{.}}</option>
                     {{/categoriesList}}
                 </select>
                 <input type="submit" value="Chercher">

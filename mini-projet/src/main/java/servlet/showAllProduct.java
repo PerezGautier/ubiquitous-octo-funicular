@@ -17,7 +17,7 @@ import java.util.Properties;
 import model.DAO;
 import model.DataSourceFactory;
 
-@WebServlet(name = "indexServlet", urlPatterns = {"/indexServlet"})
+@WebServlet(name = "showAllProduct", urlPatterns = {"/showAllProduct"})
 public class showAllProduct extends HttpServlet {
 
 	/**
