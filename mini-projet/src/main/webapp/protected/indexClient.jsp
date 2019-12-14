@@ -1,16 +1,21 @@
-       
 <!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
 <html>
     <head>
-        <title>Affichage des produits</title>
+        <title>TODO supply a title</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!-- On charge jQuery -->
-        <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-        <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
-        <!-- importer le fichier de style -->
         <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
         <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
+
         <script>
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
@@ -68,18 +73,21 @@
                 alert(JSON.parse(xhr.responseText).message);
             }
 
-        </script>
-        <!-- un CSS pour formatter la table -->
-        <link rel="stylesheet" type="text/css" href="css/tableformat.css">
+        </script>     
+        
+       
     </head>
     <body>
         <div class="header">
-            <a href="index.html" class="logo">CompanyLogo</a>
-            <div class="header-right">
-              <a class="active" href="login.jsp">Log In</a>
-              <a href="inscription.jsp">Sign On</a>
+            <a href="indexClient.jsp" class="logo">CompanyLogo</a>
+            <div class="header-right">   
+                <a class="active" href="protected/infoClient.jsp">${userName}</a>
+                <form action="<c:url value="LoginController"/>" method="POST"> 
+                    <input type='submit' name='action' value='logout'>
+                </form>  
             </div>
-         </div> 
+        </div> 
+        <div style="color:red">${errorMessage}</div>
         <div id="containerProduits">
         <!-- On montre le formulaire de saisie --> 
         <!-- Le template qui sert à afficher la liste des categories -->
@@ -113,11 +121,13 @@
                 <TR>
                     <TD>{{nom}} </TD>
                     <TD>{{prix}} €</TD>
+                    <TD><button onclick="addProduct('{{produitId}}')">Acheter</button></TD>
                 </TR>
             {{/records}}
             </TABLE>
         </script>
         
         </div>
+        
     </body>
 </html>
