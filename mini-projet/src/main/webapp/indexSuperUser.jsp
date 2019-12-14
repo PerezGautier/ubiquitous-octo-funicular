@@ -15,7 +15,7 @@
 	<body>
 		<h1>Bienvenue ${userName}</h1>
                 <a href="index.html">index</a>
-		<form action="<c:url value="/"/>" method="POST"> 
+		<form action="<c:url value="LoginController"/>" method="POST"> 
 			<input type='submit' name='action' value='logout'>
 		</form>
 		<hr/>

@@ -214,7 +214,7 @@ public class DAO {
 
 	List<ProduitEntity> result = new LinkedList<>();
 
-	String sql = "SELECT * FROM Produit JOIN Categorie ON Categorie=Code WHERE Libelle = ?";
+	String sql = "SELECT * FROM Produit, Categorie where Categorie.CODE=Produit.CATEGORIE and Produit.CATEGORIE=(select code from Categorie where Libelle=?)";
 	try (Connection connection = myDataSource.getConnection(); 
 		 PreparedStatement stmt = connection.prepareStatement(sql)) {
 		stmt.setString(1, libCategorie);
@@ -478,12 +478,12 @@ public class DAO {
      * 
      * ************************************************************************************/
     
-    public ClientEntity unClient(String codeClient) throws SQLException {
+    public ClientEntity unClient(String cont) throws SQLException {
         ClientEntity result = null;
-        String sql = "SELECT * FROM Client WHERE Code = ?";
+        String sql = "SELECT * FROM Client WHERE Contact = ?";
         try (Connection connection = myDataSource.getConnection(); 
             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, codeClient);
+            stmt.setString(1, cont);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String clientId = rs.getString("Code");

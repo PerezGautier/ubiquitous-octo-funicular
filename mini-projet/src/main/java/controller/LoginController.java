@@ -46,10 +46,10 @@ public class LoginController extends HttpServlet {
 			jspView = "login.jsp";
                 } else if (!userName.equals("Mr. Super-User")) { // L'utilisateur est connecté
                     // On choisit la page d'affichage
-                    jspView = "protected/indexClient.jsp";
+                    jspView = "indexClient.jsp";
                 } else { // L'utilisateur est connecté
                     // On choisit la page de l'administrateur
-                    jspView = "protected/indexSuperUser.jsp";
+                    jspView = "indexSuperUser.jsp";
                 }
 		// On va vers la page choisie
 		request.getRequestDispatcher(jspView).forward(request, response);

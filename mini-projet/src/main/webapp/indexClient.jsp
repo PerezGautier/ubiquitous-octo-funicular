@@ -81,7 +81,7 @@ and open the template in the editor.
         <div class="header">
             <a href="indexClient.jsp" class="logo">CompanyLogo</a>
             <div class="header-right">   
-                <a class="active" href="protected/infoClient.jsp">${userName}</a>
+                <a class="active" href="infoClient.jsp">${userName}</a>
                 <form action="<c:url value="LoginController"/>" method="POST"> 
                     <input type='submit' name='action' value='logout'>
                 </form>  

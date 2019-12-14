@@ -10,11 +10,12 @@ and open the template in the editor.
     <head>
         <title>Info du client</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="../css/header.css" media="screen" type="text/css" />
         <!-- On charge jQuery -->
         <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+        <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
         <script>
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
@@ -28,6 +29,7 @@ and open the template in the editor.
                 $.ajax({
                     url: "showAllInfoClient",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
+                    //data: 'contact='+${userName},
                     data: $("#codeForm").serialize(),
                     dataType: "json",
                     error: showError,
@@ -86,10 +88,8 @@ and open the template in the editor.
         <!-- On montre le formulaire de saisie -->
         <h1>Info Client : </h1>
         <form id="codeForm" onsubmit="showInfo();">
-            <fieldset><legend>numero client</legend>
-            Code : <input id="code" name="code" value ="SPLIR"><br/>
+            <input id="contact" name="contact" value ="${userName}">
             <input type="submit" value="chercher">
-            </fieldset>
         </form>
         
         

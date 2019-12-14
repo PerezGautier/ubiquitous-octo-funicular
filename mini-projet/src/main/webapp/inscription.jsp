@@ -11,9 +11,17 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
         <title>JSP Page</title>
     </head>
     <body>
+        <div class="header">
+            <a href="index.html" class="logo">CompanyLogo</a>
+            <div class="header-right">
+              <a class="active" href="login.jsp">Log In</a>
+              <a href="inscription.jsp">Sign On</a>
+            </div>
+         </div> 
         <div id="container">
                 <!-- zone de connexion -->
 

@@ -35,11 +35,11 @@ public class showAllInfoClient extends HttpServlet {
 
 		// Créér le DAO avec sa source de données
 		DAO dao = new DAO(DataSourceFactory.getDataSource());
-                String code = request.getParameter("code");
-		Map<String, Object> resultat = new HashMap<>();
+                String contact = request.getParameter("contact");
+		Properties resultat = new Properties();
                 
 		try {
-			resultat.put("infoClient", dao.unClient(code));
+			resultat.put("infoClient", dao.unClient(contact));
                         
 		} catch (SQLException ex) {
                     
