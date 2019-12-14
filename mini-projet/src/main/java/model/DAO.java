@@ -25,6 +25,14 @@ public class DAO {
             this.myDataSource = dataSource;
     }
     
+    
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Catégories
+     * 
+     * ************************************************************************************/
+    
     public CategorieEntity uneCategorie(int codeCategorie) throws SQLException{
         CategorieEntity result = null;
         
@@ -110,6 +118,12 @@ public class DAO {
 	return result;
     }
     
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Produit
+     * 
+     * ************************************************************************************/
     
     public ProduitEntity unProduit(int Reference) throws SQLException{
         ProduitEntity result = null;
@@ -304,6 +318,15 @@ public class DAO {
         return result;
     }
     
+    
+    
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Ligne
+     * 
+     * ************************************************************************************/
+    
     public int ajoutLigne(int idCmd, int ref, int qtt)throws SQLException {
         int result = 0;
         String sql = "INSERT INTO Ligne(Commande, Produit, Quantite) VALUES (?,?,?)";
@@ -339,6 +362,43 @@ public class DAO {
                 result[2]=quantite;
             }
         }   
+        return result;
+    }
+    
+    
+    
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Commande
+     * 
+     * ************************************************************************************/
+    
+     public CommandeEntity uneCommande(int numero) throws SQLException{
+        CommandeEntity result = null;
+
+        String sql = "select * from Commande where Numero=?";
+
+        try(Connection connection = myDataSource.getConnection(); 
+                 PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, numero);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                int num = rs.getInt("Numero");
+                String client = rs.getString("Client");
+                Date saisie = rs.getDate("Saisie_le");
+                Date envoi = rs.getDate("Envoyee_le");
+                float port = rs.getFloat("Port");
+                String dest = rs.getString("Destinataire");
+                String add = rs.getString("Adresse_livraison");
+                String ville = rs.getString("Ville_livraison");
+                String region = rs.getString("Region_livraison");
+                String cp = rs.getString("Code_Postal_livrais");
+                String pays = rs.getString("Pays_Livraison");
+                float remise = rs.getFloat("Remise");
+                result = new CommandeEntity(num,client,saisie,envoi,port,dest,add,ville,region,cp,pays,remise);
+            } 
+        }
         return result;
     }
     
@@ -410,6 +470,81 @@ public class DAO {
         return result;
     }
     
+    
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Client
+     * 
+     * ************************************************************************************/
+    
+    public ClientEntity unClient(String codeClient) throws SQLException {
+        ClientEntity result = null;
+        String sql = "SELECT * FROM Client WHERE Code = ?";
+        try (Connection connection = myDataSource.getConnection(); 
+            PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, codeClient);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                String clientId = rs.getString("Code");
+                String societe = rs.getString("Societe");
+                String contact = rs.getString("Contact");
+                String fonction = rs.getString("Fonction");
+                String add = rs.getString("Adresse");
+                String ville = rs.getString("Ville");
+                String region = rs.getString("Region");
+                String cp = rs.getString("Code_postal");
+                String pays = rs.getString("Pays");
+                String tel = rs.getString("Telephone");
+                String fax = rs.getString("Fax");
+
+                result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+
+            }
+        }
+        return result;
+    }
+    
+    public int ajoutClient(String Code, String Societe, String Contact, String Fonction, String Adresse, String Ville,
+            String Region, String Code_postal, String Pays, String Telephone, String Fax) throws SQLException {
+		String sql = "INSERT INTO Client VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+		int result =0;
+		try (Connection myConnection = myDataSource.getConnection();
+                    PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+
+                    stmt.setString(1, Code);
+                    stmt.setString(2, Societe);
+                    stmt.setString(3, Contact);
+                    stmt.setString(4, Fonction);
+                    stmt.setString(5, Adresse);
+                    stmt.setString(6, Ville);
+                    stmt.setString(7, Region);
+                    stmt.setString(8, Code_postal);
+                    stmt.setString(9, Pays);
+                    stmt.setString(10, Telephone);
+                    stmt.setString(11, Fax);
+
+                    result = stmt.executeUpdate();
+
+                    myConnection.commit();
+		}
+        return result;
+    }
+    
+    
+    public int supprimerClient(String Code) throws SQLException {
+        String sql = "DELETE FROM CLIENT WHERE Code = ?";
+        int result =0;
+        try (Connection myConnection = myDataSource.getConnection();
+            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
+
+            stmt.setString(1, Code);
+            result = stmt.executeUpdate();
+            myConnection.commit();
+        }
+        return result;
+    }
+    
     /**
      * @param Code
      * @param Societe
@@ -451,73 +586,43 @@ public class DAO {
         return result;
     }
     
-    public int supprimerClient(String Code) throws SQLException {
-        String sql = "DELETE FROM CLIENT WHERE Code = ?";
-        int result =0;
-        try (Connection myConnection = myDataSource.getConnection();
-            PreparedStatement stmt = myConnection.prepareStatement(sql)) {
-
-            stmt.setString(1, Code);
-            result = stmt.executeUpdate();
-            myConnection.commit();
-        }
-        return result;
-    }
     
-    public ClientEntity unClient(String codeClient) throws SQLException {
-        ClientEntity result = null;
-            String sql = "SELECT * FROM Client WHERE Code = ?";
-            try (Connection connection = myDataSource.getConnection(); 
+    public boolean isClient(String code, String contact) throws SQLException {
+
+        String sql = "SELECT Contact FROM CLIENT WHERE Code=? and Contact=?";
+        List<String> result = new LinkedList<>();
+
+        try (Connection connection = myDataSource.getConnection(); 
                 PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setString(1, codeClient);
+                stmt.setString(1, code);
+                stmt.setString(2, contact);
                 ResultSet rs = stmt.executeQuery();
                 while (rs.next()) {
-                    String clientId = rs.getString("Code");
-                    String societe = rs.getString("Societe");
-                    String contact = rs.getString("Contact");
-                    String fonction = rs.getString("Fonction");
-                    String add = rs.getString("Adresse");
-                    String ville = rs.getString("Ville");
-                    String region = rs.getString("Region");
-                    String cp = rs.getString("Code_postal");
-                    String pays = rs.getString("Pays");
-                    String tel = rs.getString("Telephone");
-                    String fax = rs.getString("Fax");
-
-                    result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
-
+                        String cont = rs.getString("CONTACT");
+                        result.add(cont);
                 }
-            }
-            return result;
+        } catch(Exception ex) { // Une erreur s'est produite
+            Logger.getLogger("DAO").log(Level.SEVERE, "Transaction en erreur", ex);
+        }
+        return !result.isEmpty();
     }
     
-
-    public int ajoutClient(String Code, String Societe, String Contact, String Fonction, String Adresse, String Ville,
-            String Region, String Code_postal, String Pays, String Telephone, String Fax) throws SQLException {
-		String sql = "INSERT INTO Client VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-		int result =0;
-		try (Connection myConnection = myDataSource.getConnection();
-                    PreparedStatement stmt = myConnection.prepareStatement(sql)) {
-
-                    stmt.setString(1, Code);
-                    stmt.setString(2, Societe);
-                    stmt.setString(3, Contact);
-                    stmt.setString(4, Fonction);
-                    stmt.setString(5, Adresse);
-                    stmt.setString(6, Ville);
-                    stmt.setString(7, Region);
-                    stmt.setString(8, Code_postal);
-                    stmt.setString(9, Pays);
-                    stmt.setString(10, Telephone);
-                    stmt.setString(11, Fax);
-
-                    result = stmt.executeUpdate();
-
-                    myConnection.commit();
-		}
-        return result;
-    }
     
+    
+    /*************************************************************************************
+     * 
+     * Méthodes Statistique
+     * 
+     * ************************************************************************************/
+    
+    
+    /*
+     * @param codeCategorie
+     * @param deb
+     * @param fin
+     * @return
+     * @throws SQLException 
+     */
     /*format de la date "yyyy-mm-dd"*/
     public float caCategoriePeriode(int codeCategorie, String deb, String fin) throws SQLException {
         float chiffreAffaires = 0;
@@ -572,31 +677,5 @@ public class DAO {
 
     }
 
-    public CommandeEntity uneCommande(int numero) throws SQLException{
-    CommandeEntity result = null;
-
-    String sql = "select * from Commande where Numero=?";
-
-    try(Connection connection = myDataSource.getConnection(); 
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
-        stmt.setInt(1, numero);
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            int num = rs.getInt("Numero");
-            String client = rs.getString("Client");
-            Date saisie = rs.getDate("Saisie_le");
-            Date envoi = rs.getDate("Envoyee_le");
-            float port = rs.getFloat("Port");
-            String dest = rs.getString("Destinataire");
-            String add = rs.getString("Adresse_livraison");
-            String ville = rs.getString("Ville_livraison");
-            String region = rs.getString("Region_livraison");
-            String cp = rs.getString("Code_Postal_livrais");
-            String pays = rs.getString("Pays_Livraison");
-            float remise = rs.getFloat("Remise");
-            result = new CommandeEntity(num,client,saisie,envoi,port,dest,add,ville,region,cp,pays,remise);
-        } 
-    }
-    return result;
-    }
+ 
 }
