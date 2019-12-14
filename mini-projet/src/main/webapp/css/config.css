@@ -28,6 +28,7 @@ body{
     width: 38%;
     margin: 0 auto;
     padding-bottom: 10px;
+    
 }
 
 /* Full-width inputs */
@@ -80,6 +81,7 @@ body{
 {
     margin-left: 3%;
     font-size: 4em;
+    text-align: center;
 }
 
 
