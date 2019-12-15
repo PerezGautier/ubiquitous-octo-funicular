@@ -247,6 +247,7 @@
                     fin : <input type='date' name='dateFin'/><br/>
                     <input type="submit" value="Chercher">
                 </form>
+                
             </script>
 
             <!-- Affichage du formulaire -->

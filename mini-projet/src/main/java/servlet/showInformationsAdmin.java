@@ -46,7 +46,7 @@ public class showInformationsAdmin extends HttpServlet {
                 
 	try {
             DAO dao = new DAO(DataSourceFactory.getDataSource());
-            /*resultat.put("paysList", dao.);*/
+            resultat.put("paysList", dao.lesPays());
             resultat.put("categoriesList", dao.toutesCategories());
 			
 			
