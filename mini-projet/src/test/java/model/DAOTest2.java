@@ -36,7 +36,7 @@ public class DAOTest2 {
     //gautier
     private void executeSQLScript(Connection connexion, String filename)  throws IOException, SqlToolError, SQLException {
         // On initialise la base avec le contenu d'un fichier de test
-        String sqlFilePath = DAOTest.class.getResource(filename).getFile();
+        String sqlFilePath = DAOTest2.class.getResource(filename).getFile();
         SqlFile sqlFile = new SqlFile(new File(sqlFilePath));
 
         sqlFile.setConnection(connexion);
