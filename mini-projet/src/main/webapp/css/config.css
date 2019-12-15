@@ -173,3 +173,36 @@ body{
     border: solid 1px;
     padding: 15px;
 }
+
+
+
+
+
+
+
+/******************************Page Admin*************************************/
+
+#containerAdmin
+{
+    width:60%;
+    margin: 0 auto;
+    margin-top:2%;
+    background: #fff;
+    padding: 3%;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+
+
+#containerAdmin h1
+{
+    margin-left: 3%;
+    font-size: 3.5em;
+}
+
+#containerAdmin h2
+{
+    margin-left: 3%;
+    font-size:2.5em;
+    font-weight: bold;
+    text-align: center;    
+}
