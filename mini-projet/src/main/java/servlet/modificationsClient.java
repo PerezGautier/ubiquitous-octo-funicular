@@ -68,7 +68,7 @@ public class modificationsClient extends HttpServlet {
             DAO dao = new DAO(DataSourceFactory.getDataSource());
             dao.modifClient(Code,Societe, Contact, Fonction, Adresse, 
                     Ville, Region, Code_postal, Pays, Telephone, Fax);
-            message = String.format("informations du cliet %s modifiées", Code);
+            message = String.format("informations du client modifiées");
             
 	} catch (SQLException ex) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

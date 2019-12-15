@@ -79,7 +79,8 @@ and open the template in the editor.
     <body>
         <div class="header">
             <a href="indexClient.jsp" class="logo">CompanyLogo</a>
-            <div class="header-right">   
+            <div class="header-right">  
+                <a href="historiqueClient.jsp">Historique</a>
                 <a class="active" href="infoClient.jsp">${userName}</a>
                 <form action="<c:url value="LoginController"/>" method="POST"> 
                     <input type='submit' name='action' value='logout'>
@@ -98,69 +99,50 @@ and open the template in the editor.
         
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
-            <form id="modifInfos" onsubmit="event.preventDefault(); modifierInfos();">
-                <TABLE>
-                {{! Pour chaque enregistrement }}
-                {{#infoClient}}
-                    {{! Une ligne dans la table }}
-                    <TR>
-                        <th>Identifiant</th>
-                        <td><input name="clientId" type="text" value="{{Code}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Societe</th>
-                        <td><input name="societe" type="text" value="{{Societe}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Contact</th>
-                        <td><input name="contact" type="text" value="{{Contact}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Fonction</th>
-                        <td><input name="fonction" type="text" value="{{Fonction}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Adresse</th>
-                        <td><input name="add" type="text" value="{{Adresse}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Ville</th>
-                        <td><input name="ville" type="text" value="{{Ville}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Region</th>
-                        <td><input name="region" type="text" value="{{Region}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Code Postal</th>
-                        <td><input name="cp" type="text" value="{{Code_postal}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Pays</th>
-                        <td><input name="pays" type="text" value="{{Pays}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>Telephone</th>
-                        <td><input name="tel" type="text" value="{{Telephone}}"/></td>
-                    </tr>
-        
-                    <tr>
-                        <th>FAX</th>
-                        <td><input name="fax" type="text" value="{{Fax}}"/></td>
-                    </tr>
-                {{/infoClient}}
-                </TABLE>
-                <input type="submit" value ="MODIFIER">
-            </form>
+            <div id="container">
+                <form id="modifInfos" onsubmit="event.preventDefault(); modifierInfos();">
+                    {{! Pour chaque enregistrement }}
+                    {{#infoClient}}
+                        {{! Une ligne dans la table }}
+
+                        <h1>Informations</h1>
+                        <label><b>Identifiant</b></label>
+                        <input name="clientId" type="text" value="{{Code}}"/>
+
+                        <label><b>Societe</b></label>
+                        <td><input name="societe" type="text" value="{{Societe}}"/>
+
+                        <label><b>Contact</b></label>
+                        <input name="contact" type="text" value="{{Contact}}"/>
+
+                        <label><b>Fonction</b></label>
+                        <input name="fonction" type="text" value="{{Fonction}}"/>
+
+                        <label><b>Adresse</b></label>
+                        <input name="add" type="text" value="{{Adresse}}"/>
+
+                        <label><b>Ville</b></label>
+                        <input name="ville" type="text" value="{{Ville}}"/>
+
+                        <label><b>Region</b></label>
+                        <input name="region" type="text" value="{{Region}}"/>
+
+                        <label><b>Code Postal</b></label>
+                        <input name="cp" type="text" value="{{Code_postal}}"/>
+
+                        <label><b>Pays</b></label>
+                        <input name="pays" type="text" value="{{Pays}}"/>
+
+                        <label><b>Telephone</b></label>
+                        <input name="tel" type="text" value="{{Telephone}}"/>
+
+                        <label><b>FAX</b></label>
+                        <input name="fax" type="text" value="{{Fax}}"/>
+                    {{/infoClient}}
+                    </TABLE>
+                    <input type="submit" value ="MODIFIER">
+                </form>
+            </div>
         </script>
     </body>
 </html>
