@@ -32,6 +32,22 @@ public class DAO {
      * Méthodes Catégories
      * 
      * ************************************************************************************/
+    public List<String> lesPays() throws SQLException{
+       List<String> result = new LinkedList<>();
+        
+        String sql = "select Pays from client";
+        
+        try(Connection connection = myDataSource.getConnection(); 
+		 Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                String unPays = rs.getString("Pays");
+                result.add(unPays);
+            }
+            
+        }
+        return result;
+    }
     
     public CategorieEntity uneCategorie(int codeCategorie) throws SQLException{
         CategorieEntity result = null;
