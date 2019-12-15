@@ -289,53 +289,53 @@ public class DAOTest2 {
     */
     @Test
     public void testClientExist() throws SQLException{
-        ClientEntity cli = dao.unClient("ALFKI");
-        assertNotNull("Le client existe", cli);
-        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+        List<ClientEntity> result = dao.unClient("ALFKI");
+        assertNotNull("Le client existe", result);
+        assertEquals(result.get(0).getSociete(),"Alfreds Futterkiste");
     }
     
     @Test
     public void testClientNotExist() throws SQLException{
-        ClientEntity cli = dao.unClient("ATEST");
-        assertNull("Le client n'existe pas encore",cli);
+        List<ClientEntity> result = dao.unClient("ATEST");
+        assertNull("Le client n'existe pas encore",result);
     }
     
     @Test
     public void testSuppClient()throws SQLException{
-        ClientEntity cli = dao.unClient("ALFKI");
-        assertNotNull("Le client existe", cli);
-        assertEquals(cli.getSociete(),"Alfreds Futterkiste");
+        List<ClientEntity> result = dao.unClient("ALFKI");
+        assertNotNull("Le client existe", result);
+        assertEquals(result.get(0).getSociete(),"Alfreds Futterkiste");
         int nbSuppressions = dao.supprimerClient("ALFKI");
         assertEquals(nbSuppressions,1);
-        ClientEntity cli2 = dao.unClient("ALFKI");
-        assertNull("Le client n'existe pas encore",cli2);
+        List<ClientEntity> result2 = dao.unClient("ALFKI");
+        assertNull("Le client n'existe pas encore",result2);
     }
     
     @Test
     public void testModifierClient() throws SQLException{
         int result = dao.modifClient("ALFKI", "Une société", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
         assertEquals(result,1);
-        ClientEntity cli = dao.unClient("ALFKI");
-        assertEquals(cli.getSociete(),"Une société");
-        assertEquals(cli.getContact(),"Maria Anders");
-        assertEquals(cli.getFonction(),"Représentant(e)");
-        assertEquals(cli.getVille(),"Berlin");
-        assertEquals(cli.getAdresse(),"Obere Str. 57");
-        assertEquals(cli.getCode_postal().trim(),"12209");
-        assertEquals(cli.getRegion(),"Region");
-        assertEquals(cli.getPays(),"Allemagne");
-        assertEquals(cli.getTelephone(),"030-0074321");
-        assertEquals(cli.getFax(),"030-0076545");
+        List<ClientEntity> result2 = dao.unClient("ALFKI");
+        assertEquals(result2.get(0).getSociete(),"Une société");
+        assertEquals(result2.get(0).getContact(),"Maria Anders");
+        assertEquals(result2.get(0).getFonction(),"Représentant(e)");
+        assertEquals(result2.get(0).getVille(),"Berlin");
+        assertEquals(result2.get(0).getAdresse(),"Obere Str. 57");
+        assertEquals(result2.get(0).getCode_postal().trim(),"12209");
+        assertEquals(result2.get(0).getRegion(),"Region");
+        assertEquals(result2.get(0).getPays(),"Allemagne");
+        assertEquals(result2.get(0).getTelephone(),"030-0074321");
+        assertEquals(result2.get(0).getFax(),"030-0076545");
     }
 
     @Test
     public void testAjoutClient() throws SQLException{
-        ClientEntity cli = dao.unClient("AAAAA");
-        assertNull("Le client n'existe pas encore",cli);
+        List<ClientEntity> result2 = dao.unClient("AAAAA");
+        assertNull("Le client n'existe pas encore",result2);
         int result = dao.ajoutClient("AAAAA", "Une société", "Maria Anders", "Représentant(e)", "Obere Str. 57", "Berlin", "Region", "12209", "Allemagne", "030-0074321", "030-0076545");
         assertEquals(result,1);
-        cli = dao.unClient("AAAAA");
-        assertEquals(cli.getSociete(),"Une société");
+        result2 = dao.unClient("AAAAA");
+        assertEquals(result2.get(0).getSociete(),"Une société");
     }
     
     @Test

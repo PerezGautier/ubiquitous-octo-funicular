@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!--
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
@@ -12,6 +14,8 @@ and open the template in the editor.
         <script	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <!-- On charge le moteur de template mustache https://mustache.github.io/ -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.8.1/mustache.min.js"></script>
+        <link rel="stylesheet" href="css/config.css" media="screen" type="text/css" />
+        <link rel="stylesheet" href="css/header.css" media="screen" type="text/css" />
         <script>
             $(document).ready(// Exécuté à la fin du chargement de la page
                     function () {
@@ -25,7 +29,8 @@ and open the template in the editor.
                 $.ajax({
                     url: "showAllInfoClient",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    data: $("#codeForm").serialize(),
+                    data: 'code='+'${codeName}',
+                    //data: $("#codeForm").serialize(),
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats
@@ -67,17 +72,22 @@ and open the template in the editor.
             }
 
         </script>
-        <!-- un CSS pour formatter la table -->
-        <link rel="stylesheet" type="text/css" href="css/tableformat.css">
     </head>
     <body>
+        <div class="header">
+            <a href="indexClient.jsp" class="logo">CompanyLogo</a>
+            <div class="header-right">   
+                <a class="active" href="infoClient.jsp">${userName}</a>
+                <form action="<c:url value="LoginController"/>" method="POST"> 
+                    <input type='submit' name='action' value='logout'>
+                </form>  
+            </div>
+        </div>
         <!-- On montre le formulaire de saisie -->
         <h1>Info Client : </h1>
         <form id="codeForm" onsubmit="showInfo();">
-            <fieldset><legend>numero client</legend>
-            Code : <input id="code" name="code" value ="SPLIR"><br/>
+            <input id="code" name="code" value ="${codeName}">
             <input type="submit" value="chercher">
-            </fieldset>
         </form>
         
         

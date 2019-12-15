@@ -124,6 +124,7 @@ public class LoginController extends HttpServlet {
                     if (tmp){
                         HttpSession session = request.getSession(true); // démarre la session pour le client
 			session.setAttribute("userName", loginParam);
+                        session.setAttribute("codeName", passwordParam);
                     } else { // On positionne un message d'erreur pour l'afficher dans la JSP
 			request.setAttribute("errorMessage", "Login/Password incorrect");
                     }

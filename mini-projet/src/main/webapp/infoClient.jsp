@@ -29,8 +29,8 @@ and open the template in the editor.
                 $.ajax({
                     url: "showAllInfoClient",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
-                    //data: 'contact='+${userName},
-                    data: $("#codeForm").serialize(),
+                    data: 'code='+'${codeName}',
+                    //data: $("#codeForm").serialize(),
                     dataType: "json",
                     error: showError,
                     success: // La fonction qui traite les résultats
@@ -72,8 +72,6 @@ and open the template in the editor.
             }
 
         </script>
-        <!-- un CSS pour formatter la table -->
-        <link rel="stylesheet" type="text/css" href="css/tableformat.css">
     </head>
     <body>
         <div class="header">
@@ -84,14 +82,7 @@ and open the template in the editor.
                     <input type='submit' name='action' value='logout'>
                 </form>  
             </div>
-        </div>
-        <!-- On montre le formulaire de saisie -->
-        <h1>Info Client : </h1>
-        <form id="codeForm" onsubmit="showInfo();">
-            <input id="contact" name="contact" value ="${userName}">
-            <input type="submit" value="chercher">
-        </form>
-        
+        </div>        
         
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
@@ -105,67 +96,56 @@ and open the template in the editor.
                     {{! Une ligne dans la table }}
                     <TR>
                         <th>Identifiant</th>
-                        <TD>{{Code}}</TD>
                         <td><input id="clientId" type="text" value="{{Code}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Societe</th>
-                        <TD>{{Societe}}</TD>
                         <td><input id="societe" type="text" value="{{Societe}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Addresse mail</th>
-                        <TD>{{Contact}}</TD>
                         <td><input id="contact" type="text" value="{{Contact}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Fonction</th>
-                        <TD>{{Fonction}}</TD>
                         <td><input id="fonction" type="text" value="{{Fonction}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Adresse</th>
-                        <TD>{{Adresse}}</TD>
                         <td><input id="add" type="text" value="{{Adresse}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Ville</th>
-                        <TD>{{Ville}}</TD>
                         <td><input id="ville" type="text" value="{{Ville}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Region</th>
-                        <TD>{{Region}}</TD>
                         <td><input id="region" type="text" value="{{Region}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Code Postal</th>
-                        <TD>{{Code_postal}}</TD>
                         <td><input id="cp" type="text" value="{{Code_postal}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Pays</th>
-                        <TD>{{Pays}}</TD>
                         <td><input id="pays" type="text" value="{{Pays}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Telephone</th>
-                        <TD>{{Telephone}}</TD>
                         <td><input id="tel" type="text" value="{{Telephone}}"/></td>
                     </tr>
         
                     <tr>
                         <th>FAX</th>
-                        <TD>{{Fax}}</TD>
                         <td><input id="fax" type="text" value="{{Fax}}"/></td>
                     </tr>
                 {{/infoClient}}

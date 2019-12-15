@@ -20,6 +20,7 @@ import org.apache.derby.tools.ij;
 @WebListener()
 public class ApplicationListener implements ServletContextListener {
 
+        
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
 		if (!databaseExists()) {

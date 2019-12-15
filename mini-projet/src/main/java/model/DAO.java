@@ -478,12 +478,12 @@ public class DAO {
      * 
      * ************************************************************************************/
     
-    public ClientEntity unClient(String cont) throws SQLException {
-        ClientEntity result = null;
-        String sql = "SELECT * FROM Client WHERE Contact = ?";
+    public List<ClientEntity> unClient(String code) throws SQLException {
+        List<ClientEntity> result = new LinkedList<>();
+        String sql = "SELECT * FROM Client WHERE Code = ?";
         try (Connection connection = myDataSource.getConnection(); 
             PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, cont);
+            stmt.setString(1, code);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String clientId = rs.getString("Code");
@@ -498,8 +498,8 @@ public class DAO {
                 String tel = rs.getString("Telephone");
                 String fax = rs.getString("Fax");
 
-                result = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
-
+                ClientEntity client = new ClientEntity(clientId, societe, contact, fonction, add, ville, region, cp, pays, tel, fax);
+                result.add(client);
             }
         }
         return result;
