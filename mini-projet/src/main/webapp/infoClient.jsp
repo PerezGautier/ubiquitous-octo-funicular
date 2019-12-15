@@ -51,12 +51,15 @@ and open the template in the editor.
                 // On fait un appel AJAX pour modifier les informations et les 
                 // récupérer par la suite
                 $.ajax({
-                    url: "modifClient",
+                    url: "modificationsClient",
                     // serialize() renvoie tous les paramètres saisis dans le formulaire
                     data: $("#modifInfos").serialize(),
                     dataType: "json",
                     success: // La fonction qui traite les résultats
                             function (result) {
+                                var templ = $('#resultTemplate').html();
+                                var processedTemplate = Mustache.to_html(templ, result);
+                                $('#res').html(processedTemplate);
                                 showInfo();
                                 console.log(result);
                             },
@@ -84,69 +87,75 @@ and open the template in the editor.
             </div>
         </div>        
         
+        <div id="res"></div>
+        <script id="resultTemplate" type="text/template">
+            {{#message}}
+                <h1>{{.}}</h1>
+            {{/message}}
+        </script>    
          <!-- La zone où les résultats vont s'afficher -->
         <div id="codes"></div>
         
         <!-- Le template qui sert à formatter la liste des codes -->
         <script id="codesTemplate" type="text/template">
-            <form id="modifInfos" onsubmit="modifierInfos();">
+            <form id="modifInfos" onsubmit="event.preventDefault(); modifierInfos();">
                 <TABLE>
                 {{! Pour chaque enregistrement }}
                 {{#infoClient}}
                     {{! Une ligne dans la table }}
                     <TR>
                         <th>Identifiant</th>
-                        <td><input id="clientId" type="text" value="{{Code}}"/></td>
+                        <td><input name="clientId" type="text" value="{{Code}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Societe</th>
-                        <td><input id="societe" type="text" value="{{Societe}}"/></td>
+                        <td><input name="societe" type="text" value="{{Societe}}"/></td>
                     </tr>
         
                     <tr>
-                        <th>Addresse mail</th>
-                        <td><input id="contact" type="text" value="{{Contact}}"/></td>
+                        <th>Contact</th>
+                        <td><input name="contact" type="text" value="{{Contact}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Fonction</th>
-                        <td><input id="fonction" type="text" value="{{Fonction}}"/></td>
+                        <td><input name="fonction" type="text" value="{{Fonction}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Adresse</th>
-                        <td><input id="add" type="text" value="{{Adresse}}"/></td>
+                        <td><input name="add" type="text" value="{{Adresse}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Ville</th>
-                        <td><input id="ville" type="text" value="{{Ville}}"/></td>
+                        <td><input name="ville" type="text" value="{{Ville}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Region</th>
-                        <td><input id="region" type="text" value="{{Region}}"/></td>
+                        <td><input name="region" type="text" value="{{Region}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Code Postal</th>
-                        <td><input id="cp" type="text" value="{{Code_postal}}"/></td>
+                        <td><input name="cp" type="text" value="{{Code_postal}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Pays</th>
-                        <td><input id="pays" type="text" value="{{Pays}}"/></td>
+                        <td><input name="pays" type="text" value="{{Pays}}"/></td>
                     </tr>
         
                     <tr>
                         <th>Telephone</th>
-                        <td><input id="tel" type="text" value="{{Telephone}}"/></td>
+                        <td><input name="tel" type="text" value="{{Telephone}}"/></td>
                     </tr>
         
                     <tr>
                         <th>FAX</th>
-                        <td><input id="fax" type="text" value="{{Fax}}"/></td>
+                        <td><input name="fax" type="text" value="{{Fax}}"/></td>
                     </tr>
                 {{/infoClient}}
                 </TABLE>

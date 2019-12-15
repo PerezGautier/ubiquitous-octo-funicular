@@ -566,7 +566,7 @@ public class DAO {
 		int result =0;
 		try (Connection myConnection = myDataSource.getConnection();
                     PreparedStatement stmt = myConnection.prepareStatement(sql)) {
-
+                    
                     stmt.setString(1, Societe);
                     stmt.setString(2, Contact);
                     stmt.setString(3, Fonction);

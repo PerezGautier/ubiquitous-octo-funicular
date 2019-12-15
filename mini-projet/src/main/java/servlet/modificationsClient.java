@@ -22,7 +22,7 @@ import model.DataSourceFactory;
  *
  * @author pedago
  */
-@WebServlet(name = "modificationsClient", urlPatterns = {"/modifClient"})
+@WebServlet(name = "modificationsClient", urlPatterns = {"/modificationsClient"})
 public class modificationsClient extends HttpServlet {
 
     /**
@@ -37,68 +37,35 @@ public class modificationsClient extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        
-        DAO dao = new DAO(DataSourceFactory.getDataSource());
+        Properties resultat = new Properties();
 	String message;
         
         // récupération et vérification de toutes les informations sur le client
         String Code = request.getParameter("clientId");
-        if(Code.equals("")){
-            Code = "NULL";
-        }
         
         String Societe = request.getParameter("societe");
-        if(Societe.equals("")){
-            Societe = "NULL";
-        }
         
         String Contact = request.getParameter("contact");
-        if(Contact.equals("")){
-            Contact = "NULL";
-        }
-        
+    
         String Fonction = request.getParameter("fonction");
-        if(Fonction.equals("")){
-            Fonction = "NULL";
-        }
         
         String Adresse = request.getParameter("add");
-        if(Adresse.equals("")){
-            Adresse = "NULL";
-        }
         
         String Ville = request.getParameter("ville");
-        if(Ville.equals("")){
-            Ville = "NULL";
-        }
         
         String Region = request.getParameter("region");
-        if(Region.equals("")){
-            Region = "NULL";
-        }
         
         String Code_postal = request.getParameter("cp");
-        if(Code_postal.equals("")){
-            Code_postal = "NULL";
-        }
         
         String Pays = request.getParameter("pays");
-        if(Pays.equals("")){
-            Pays = "NULL";
-        }
         
         String Telephone = request.getParameter("tel");
-        if(Telephone.equals("")){
-            Telephone = "NULL";
-        }
         
         String Fax = request.getParameter("fax");
-        if(Fax.equals("")){
-            Fax = "NULL";
-        }
         
         
 	try {
+            DAO dao = new DAO(DataSourceFactory.getDataSource());
             dao.modifClient(Code,Societe, Contact, Fonction, Adresse, 
                     Ville, Region, Code_postal, Pays, Telephone, Fax);
             message = String.format("informations du cliet %s modifiées", Code);
@@ -107,8 +74,7 @@ public class modificationsClient extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             message = ex.getMessage();
 	}
-		
-	Properties resultat = new Properties();
+
 	resultat.put("message", message);
 
 	try (PrintWriter out = response.getWriter()) {
